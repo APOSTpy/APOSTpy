@@ -1,0 +1,14 @@
+#!/bin/bash
+
+# ./runTests [molecc]
+# If no file is specified as an argument, the script executes all `*.py` from the current directory.
+
+if [ -z $1 ]; then
+  files=$(ls *_main.py)
+  for file in $files; do
+    name=$(echo $file | sed 's/.py//')
+    python3 "$file" > "$name.pyout"
+  done
+else
+  python3 "$1.py" > "$1.pyout"
+fi
