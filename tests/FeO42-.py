@@ -37,9 +37,13 @@ with lib.with_omp_threads(8):
     mf.init_guess = 'chkfile'
     mf.kernel()
 
-print(f'\n\n[DEBUG]: Number of fragments: {len(frags)}')
-print(f'[DEBUG]: Fragments: {frags}')
-print(f'[DEBUG]: \n\tBasis: {mol.basis} \n\tNumber of basis functions: {mol.nao_nr()}')
+
+print(f'''\n\n[DEBUG]:
+    Number of fragments: {len(frags)}
+    Fragments: {frags}
+    Basis: {mol.basis}
+    Number of basis functions: {mol.nao_nr()}
+''')
 
 local.print_h1(molName)
 

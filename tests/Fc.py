@@ -60,9 +60,12 @@ frags=[f1,f2,f3]
 
 # tools.molden.from_mo(mol, molName+'.molden', mf.mo_coeff, spin='Alpha', symm=None, ene=None, occ=None, ignore_h=True)
 
-print(f'\n\n[DEBUG]: Number of fragments: {len(frags)}')
-print(f'[DEBUG]: Fragments: {frags}')
-print(f'[DEBUG]: \n\tBasis: {mol.basis} \n\tNumber of basis functions: {mol.nao_nr()}')
+print(f'''\n\n[DEBUG]:
+    Number of fragments: {len(frags)}
+    Fragments: {frags}
+    Basis: {mol.basis}
+    Number of basis functions: {mol.nao_nr()}
+''')
 
 local.print_h1(molName)
 

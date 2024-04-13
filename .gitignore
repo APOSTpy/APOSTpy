@@ -1,2 +1,6 @@
 venv-quantum
 __pycache__
+apost3d_workdir
+/tests/*
+!/tests/*.py
+casscf.py

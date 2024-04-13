@@ -21,20 +21,27 @@ def print_h2(title):
 
 
 
+
+
 ### FUNCTIONS FOR CALCULATIONS ###
 
-def make_fragment_overlap(molname,mol,mf,Frags,calc=None):
+def make_fragment_overlap(molName,mol,myCalc,Frags,calc):
     '''
     Builds an array of Overlap Matrices
         S = occ_coeff.T * S * eta_slices * occ_coeff
     '''
     
-    from pyscf import lo
+    from pyscf import lo, mcscf
     import numpy as np
+    import scipy
 
-    S = mf.get_ovlp()
-    U_inv = lo.orth_ao(mf,calc,pre_orth_ao=None)
-    U = np.linalg.inv(U_inv.T)
+    S = mol.intor_symmetric('int1e_ovlp')  #S = myCalc.get_ovlp()
+    if calc!="mulliken":
+        if calc=="nao":
+            U_inv = lo.orth_ao(myCalc,calc,pre_orth_ao=None)
+        else:
+            U_inv = lo.orth_ao(mol,calc,pre_orth_ao=None)
+        U = np.linalg.inv(U_inv.T)
 
     natom = mol.natm
     nbas = mol.nao
@@ -53,45 +60,87 @@ def make_fragment_overlap(molname,mol,mf,Frags,calc=None):
             eta_frags[ifrag] += eta[atom-1]
         ifrag+=1
 
-    try:
-        occ_coeff = mf.mo_coeff[:, mf.mo_occ > 0] #Coefficients matrix of the occupied molecular orbitals
+    S_AO_frags = []
+    for i in range(nfrags):
+        eta_slices = eta_frags[i]
+        if calc=='mulliken':
+            S_AO_frag_i = np.linalg.multi_dot((eta_slices, S, eta_slices))
+        else: #lowdin, metalowdin, nao
+            S_AO_frag_i = np.linalg.multi_dot((U, eta_slices, U.T))
+        S_AO_frags.append(S_AO_frag_i)
+    
+    kind_mf = str(type(myCalc))
+    if ("RHS" in kind_mf or "RKS" in kind_mf):
+        occ_coeff = myCalc.mo_coeff[:, myCalc.mo_occ > 0] #Coefficients matrix of the occupied molecular orbitals
 
         Smo = []
         for i in range(nfrags):
-            eta_slices = eta_frags[i]
-            if calc=='mulliken':
-                Smo_i = np.linalg.multi_dot((occ_coeff.T, S, eta_slices, occ_coeff))
-            else: #lowdin, metalowdin, nao
-                Smo_i = np.linalg.multi_dot((occ_coeff.T, U, eta_slices, U.T, occ_coeff))
-            Smo.append(Smo_i)
+            S_AO_frag = S_AO_frags[i]
+            Smo.append( np.linalg.multi_dot((occ_coeff.T, S_AO_frag, occ_coeff)) )
         return Smo
 
-    except: #when there's a distinction between alpha and beta, pyscf returns a tuple
-        occ_coeff_a = mf.mo_coeff[0][:, mf.mo_occ[0] > 0]
-        occ_coeff_b = mf.mo_coeff[1][:, mf.mo_occ[1] > 0]
+    elif ("UHF" in kind_mf or "UKF" in kind_mf):
+        occ_coeff_a = myCalc.mo_coeff[0][:, myCalc.mo_occ[0] > 0]
+        occ_coeff_b = myCalc.mo_coeff[1][:, myCalc.mo_occ[1] > 0]
 
-        Salpha = []
+        # implement as func to avoid repeating
+        Smo_a = []
+        Smo_b = []
         for i in range(nfrags):
-            eta_slices = eta_frags[i]
-            if calc=='mulliken':
-                Salpha_i = np.linalg.multi_dot((occ_coeff_a.T, S, eta_slices, occ_coeff_a))
-            else: #lowdin, metalowdin, nao
-                Salpha_i = np.linalg.multi_dot((occ_coeff_a.T, U, eta_slices, U.T, occ_coeff_a))
-            Salpha.append(Salpha_i)
-
-        Sbeta = []
+            S_AO_frag = S_AO_frags[i]
+            Smo_a.append( np.linalg.multi_dot((occ_coeff_a.T, S_AO_frag, occ_coeff_a)) )
+            Smo_b.append( np.linalg.multi_dot((occ_coeff_b.T, S_AO_frag, occ_coeff_b)) )
+        return Smo_a, Smo_b
+        
+    elif ("CASSCF" in kind_mf): #or "CCSD" or "FCI":
+        '''
+        # From Natural Orbitals
+        no_occ, no_coeff = mcscf.addons.make_natural_orbitals(mc)
+        no_occ = no_occ/2
+        thresh = 1.e-8
+        no_coeff = no_coeff[:, no_occ > thresh]
+        Smo = []
         for i in range(nfrags):
-            eta_slices = eta_frags[i]
-            if calc=='mulliken':
-                Sbeta_i = np.linalg.multi_dot((occ_coeff_b.T, S, eta_slices, occ_coeff_b))
-            else: #lowdin, metalowdin, nao
-                Sbeta_i = np.linalg.multi_dot((occ_coeff_b.T, U, eta_slices, U.T, occ_coeff_b))
-            Sbeta.append(Sbeta_i)
+            SA = np.linalg.multi_dot((no_coeff.T, S_AO_frags[i], no_coeff))
+            dim = no_coeff.shape[1]
+            for j in range(dim):
+                for k in range(dim):
+                    SA_i = np.sqrt(no_occ[j]) * SA[j,k] * np.sqrt(no_occ[k])
+            Smo.append(SA_i)
+        return Smo
+        '''
+        # From Spin Natural Orbitals
+        Dma, Dmb = mcscf.make_rdm1s(myCalc) #is mc
+        def get_Smo(Dm):
+            Smo = []
+            traza = 0 #DEBUG
+            SCR = np.linalg.multi_dot((S,Dm,S))
+            occ, coeff = scipy.linalg.eigh(SCR,b=S)
+            occ = np.flip(occ)
+            print(f'[DEBUG]: no_occ: \n{occ}')
+            occ = occ/2
+            thresh = 1.e-8
+            coeff = coeff[: , occ > thresh]
+            for i in range(nfrags):
+                SA = np.linalg.multi_dot((coeff.T, S_AO_frags[i], coeff))
+                dim = coeff.shape[1]
+                print(f'[DEBUG]: dim: {dim}')
+                traza += np.trace(SA) #DEBUG
+                print(f'[DEBUG]: tr_{i+1} = {np.trace(SA)}')
+                for j in range(dim):
+                    for k in range(dim):
+                        SA[j,k] = np.sqrt(occ[j]) * SA[j,k] * np.sqrt(occ[k])
+                Smo.append(SA)
+            print(f'[DEBUG]: traza = {traza}')
+            return Smo
+        Smo_a = get_Smo(Dma)
+        Smo_b = get_Smo(Dmb)
+        # print(f"[DEBUG]: Smo_a = {Smo_a}")
+        # print(f"[DEBUG]: Smo_b = {Smo_b}")
+        return Smo_a, Smo_b
 
-        return Salpha, Sbeta
 
-
-def getEOS_i(mol, mf, Frags, Smo, kindElecc=None, genMolden=False):
+def getEOS_i(mol, myCalc, Frags, Smo, kindElecc=None, genMolden=False):
     '''
     Calculates the Effective Oxidation State for each "fragment" of a molecule.
     Valid only for close shell molecules.
@@ -104,7 +153,7 @@ def getEOS_i(mol, mf, Frags, Smo, kindElecc=None, genMolden=False):
     nfrags = len(Frags)
     Smo_dim = Smo[0].shape[0]
 
-    print(f'[DEBUG]: Smo_dim = {Smo_dim}, Smo_len = {len(Smo)}')
+    # print(f'[DEBUG]: Smo_dim = {Smo_dim}, Smo_len = {len(Smo)}')
     # print(f'[DEBUG]: Number of fragments {nfrags}')
     # print(f'[DEBUG]: fragments {Frags}')
 
@@ -119,7 +168,6 @@ def getEOS_i(mol, mf, Frags, Smo, kindElecc=None, genMolden=False):
             eig_list.append(eig)
             fra_list.append(ifrag)
             egv_list.append(eigenvectors)
-    # test, la traza del fragmento ha de dar el num de elec.
 
     # print(f'[DEBUG]: sorted list fragment1: {eig_list[0:Smo_dim]}')
     # print(f'[DEBUG]: sorted list fragment 2: {eig_list[Smo_dim:]}')
@@ -152,30 +200,35 @@ def getEOS_i(mol, mf, Frags, Smo, kindElecc=None, genMolden=False):
         occup = eig_list[ (ifrag-1)*Smo_dim : (ifrag*Smo_dim) ]
         occup.sort(reverse=True)
         # for eig in occup:
+        thresh = 0.00100
         for i, (eig) in enumerate(occup):
-            net_occup += "%+.4f   " % round(eig, 4)
-            if ((i+1)%8==0 and i!=0):
-                net_occup += "\n      "
+            if round(eig,4) > thresh:
+                net_occup += "%+.4f   " % round(eig, 4)
+                if ((i+1)%8==0 and i!=0):
+                    net_occup += "\n" + " "*8
          
-        centerString = "FRAGMENT " + str(ifrag)
-        print(f'\n{div}\n{f"{centerString:^83s}"}\n')
-        print(f'Net occupation for fragment {ifrag}:  {round(sum(occup),5)}')
-        print(f'EIG.  {net_occup}')
-        print(div, '\n')
+        print(f'\n** FRAGMENT   {ifrag} **\n')
+        print(f'Net occupation for fragment   {ifrag}    {round(sum(occup),5)}')
+        print(f'Net occupation using >    {thresh}')
+        print(f'OCCUP.  {net_occup}')
 
 
     efos = Counter(fra_sorted[0:Smo_dim])
     # print(f'[DEBUG]: {efos}')
 
     Zs = mol.atom_charges()
-    # print('[DEBUG]: Z values', Zs, '\n')
+    #print('[DEBUG]: Z values', Zs, '\n')
     #print(f'Total number of eff-AO-s for analysis:           { int(sum(eig_list)) *nfrags }')
 
     if (kindElecc==None):
-        print(f'EOS ANALYSIS FOR ALPHA ELECTRONS')
+        print('\n----------------------------------')
+        print(' EOS ANALYSIS FOR ALPHA ELECTRONS ')
+        print('----------------------------------')
     else:
-        print(f'EOS ANALYSIS FOR {kindElecc} ELECTRONS')
-    print(f'Fragm    Elect    Last occ.  First unocc')
+        print('\n----------------------------------')
+        print(f' EOS ANALYSIS FOR {kindElecc} ELECTRONS ')
+        print('----------------------------------')
+    print(f'\n Frag.    Elect.    Last occ.  First unocc. ')
     print('-'*(12*4-6))
     EOS = [[],[]]
     ifrag=0
@@ -188,7 +241,7 @@ def getEOS_i(mol, mf, Frags, Smo, kindElecc=None, genMolden=False):
             first_unocc = efosFrag[countEfos]
         except:
             first_unocc = 0
-        print(" {:<8} {:<8} {:<4.4f}     {:<4.4f}".format(ifrag, countEfos, last_occ, first_unocc) )
+        print("   {:<8} {:<8}  {:<4.3f}      {:<4.3f}".format(ifrag, countEfos, last_occ, first_unocc) )
         
         # get EOS
         Zfrag = 0
@@ -198,8 +251,8 @@ def getEOS_i(mol, mf, Frags, Smo, kindElecc=None, genMolden=False):
         # EOS.append(Zfrag - (countEfos + countEfos) )
         EOS[0].append(Zfrag)
         EOS[1].append(countEfos)
+    print('-'*(12*4-6))
 
-    if (kindElecc==None): print_h2('Skipping for BETA eletrons.\n'); print('')
 
     # si first unocc is from the same frag, second unocc
     jump=0
@@ -210,6 +263,9 @@ def getEOS_i(mol, mf, Frags, Smo, kindElecc=None, genMolden=False):
         jump += 1
         first_unocc = scr[Smo_dim+jump]
     R = 100 * min(last_occ[0] - first_unocc[0] + 0.5, 1)
+    print(f'RELIABILITY INDEX R(%) = {round(R, 3)}')
+
+    if (kindElecc==None): print_h2('Calculation for ALPHA electrons')
 
     return EOS, R, eig_list, egv_list
 
@@ -220,103 +276,93 @@ def calcEOS_tot(EOS_a, EOS_b=None):
     return EOS
 
 
-def getEOS(molName, mol, mf, Frags, calc=None, genMolden=False):
+def getEOS(molName, mol, myCalc, Frags, calc, genMolden=False):
     '''
     Function for choosing a function to calculate EOS,
     so we only have to call one function, and it chooses which to call.
     '''
 
     import numpy as np
+    from pyscf import mcscf
+    import scipy
 
-    kind_mf = str(type(mf))
-    print(f'[DEBUG]: Kind of calculation: {kind_mf}\n')
+    kind_mf = str(type(myCalc))
+    print(f'[DEBUG]: Kind of calculation: {kind_mf}')
 
-    if kind_mf.find("RHF") != -1 or kind_mf.find("RKS")!=-1:
-        Smo = make_fragment_overlap(molName,mol,mf,Frags,calc)
-        EOS, R, eig_list, egv_list = getEOS_i(mol, mf, Frags, Smo)
+    def print_EOS_table(EOS):
+        print("\n---------------------------")
+        print(" FRAGMENT OXIDATION STATES ")
+        print("---------------------------\n")
+        print(" Frag.  Oxidation State ")
+        print("------------------------")
+        for i in range(len(EOS)):
+            print(f"{str(i+1).rjust(1)}{str(EOS[i]).rjust(12)}".center(19))
+        print("------------------------")
+        print(f" Sum:  {sum(EOS)}")
+
+    if ("RHF" in kind_mf or "RKS" in kind_mf):
+        Smo = make_fragment_overlap(molName,mol,myCalc,Frags,calc)
+        EOS, R, eig_list, egv_list = getEOS_i(mol, myCalc, Frags, Smo)
         eig_list = eig_list * 2
         egv_list = egv_list * 2
         EOS = calcEOS_tot(EOS)
-        print(f'EOS: {EOS} \tR: {R} %\n')
+        print_EOS_table(EOS)
+        print(f'\nOVERALL RELIABILITY INDEX R(%) = {round(R, 3)}')
 
-        # if genMolden:
-        #     occ_coeff = mf.mo_coeff[:, mf.mo_occ > 0]
-        #     coeff = np.dot(occ_coeff, egv_list)
+    elif ("UHF" in kind_mf or "UKS" in kind_mf or "ROHF" in kind_mf or "ROKS" in kind_mf): 
+        if ("ROHF" in kind_mf or "ROKS" in kind_mf): 
+            myCalc = pyscf.scf.addons.convert_to_uhf(myCalc, out=None, remove_df=False)
 
-    # this could be an else
-    elif kind_mf.find("UHF") != -1 or kind_mf.find("UKS") != -1 or kind_mf.find("ROHF") != -1 or kind_mf.find("ROKS") != -1: 
-        if kind_mf.find("ROHF") != -1 or kind_mf.find("ROKS") != -1:
-            mf = pyscf.scf.addons.convert_to_uhf(mf, out=None, remove_df=False)
+        Smo_a, Smo_b = make_fragment_overlap(molName,mol,myCalc,Frags,calc)
+        print(f"[DEBUG]: len Smo_a = {len(Smo_a)}")
+        print(f"[DEBUG]: len Smo_b = {len(Smo_b)}")
+        print('\n------------------------------\n EFFAOs FROM THE ALPHA DENSITY \n------------------------------')
+        EOS_a, R_a, eig_a, egv_a = getEOS_i(mol, myCalc, Frags, Smo_a, kindElecc="ALPHA")
 
-        Salpha, Sbeta = make_fragment_overlap(molName,mol,mf,Frags,calc)
-        print_h2('Calculation for ALPHA electrons')
-        EOS_a, R_a, eig_a, egv_a = getEOS_i(mol, mf, Frags, Salpha, kindElecc="ALPHA")
-
-        print_h2('Calculation for BETA electrons')
-        EOS_b, R_b, eig_b, egv_b = getEOS_i(mol, mf, Frags, Sbeta, kindElecc="BETA")
+        print('\n------------------------------\n EFFAOs FROM THE BETA DENSITY \n------------------------------')
+        EOS_b, R_b, eig_b, egv_b = getEOS_i(mol, myCalc, Frags, Smo_b, kindElecc="BETA")
 
         eig_list = (eig_a, eig_b)
         egv_list = (egv_a, egv_b)
 
         EOS = calcEOS_tot(EOS_a, EOS_b)
-        print(f'\n\n{div}\nEOS: {EOS} \tR: {max(R_a, R_b)} %\n')
+        print_EOS_table(EOS)
+        print(f'\nOVERALL RELIABILITY INDEX R(%) = {round( (R_a+R_b)/2, 3)}')
 
-        # if genMolden:
-        #     occ_coeff_a = mf.mo_coeff[0][:, mf.mo_occ[0] > 0]
-        #     coeff_a = np.dot(occ_coeff_a, egv_list[0])
-        #     occ_coeff_b = mf.mo_coeff[1][:, mf.mo_occ[1] > 0]
-        #     coeff_b = np.dot(occ_coeff_b, egv_list[0])
-        #     coeff = (coeff_a, coeff_b)
-        
-        
-    elif kind_mf.find("CASSCF") != -1:
+    elif ("CASSCF" in kind_mf):
+        Smo_a, Smo_b = make_fragment_overlap(molName,mol,myCalc,Frags,calc)
+        exit() #DEBUG
+
+        print('\n------------------------------\n EFFAOs FROM THE ALPHA DENSITY \n------------------------------')
+        EOS_a, R_a, eig_a, egv_a = getEOS_i(mol, myCalc, Frags, Smo_a, kindElecc="ALPHA")
+
+        print('\n------------------------------\n EFFAOs FROM THE BETA DENSITY \n------------------------------')
+        EOS_b, R_b, eig_b, egv_b = getEOS_i(mol, myCalc, Frags, Smo_b, kindElecc="BETA")
+
         EOS = 'This function is not finished'
-    elif kind_mf.find("KS") != -1:
+
+        eig_list = (eig_a, eig_b)
+        egv_list = (egv_a, egv_b)
+
+        EOS = calcEOS_tot(EOS_a, EOS_b)
+        print_EOS_table(EOS)
+        print(f'\nOVERALL RELIABILITY INDEX R(%) = {round( (R_a+R_b)/2, 3)}')
+
+    elif ("KS" in kind_mf):
         EOS = 'This function is not finished'
-    elif kind_mf.find("dftd3") != -1:
+    elif ("dftd3" in kind_mf):
         EOS = 'This function is not finished'
-    elif kind_mf.find("FCI") != -1:
+    elif ("FCI" in kind_mf):
         EOS = 'This function is not finished'
-    elif kind_mf.find("CCSD") != -1:
+    elif ("CCSD" in kind_mf):
         EOS = 'This function is not finished'
 
     if genMolden:
-    #     try:
-    #         occ_coeff = mf.mo_coeff[:, mf.mo_occ > 0]
-    #         coeff = np.dot(occ_coeff, scr[2])
-    #     except:
-    #         occ_coeff_a = mf.mo_coeff[0][:, mf.mo_occ[0] > 0]
-    #         coeff_a = np.dot(occ_coeff_a, scr_a[2][0])
-    #         occ_coeff_b = mf.mo_coeff[1][:, mf.mo_occ[1] > 0]
-    #         coeff_b = np.dot(occ_coeff_b, scr_b[2][0])
-    #         coeff = (coeff_a, coeff_b)
-
-        # tools.molden.from_mo(mol, molName+'.molden', mf.mo_coeff[0], spin='Alpha', symm=None, ene=None, occ=None, ignore_h=True)
-        # tools.molden.dump_scf(mf, molName+'.molden', ignore_h=True)
-        local_dump_scf(mf, molName+'.molden', eig_list, egv_list, ignore_h=True)
-
-        # from pyscf import scf, tools
-        # tools.molden.from_mo(mol, molName+'.molden', mf.mo_coeff[0], spin='Alpha', symm=None, ene=None, occ=None, ignore_h=True)
+        # tools.molden.from_mo(mol, molName+'.molden', myCalc.mo_coeff[0], spin='Alpha', symm=None, ene=None, occ=None, ignore_h=True)
+        local_dump_scf(myCalc, molName+'.molden', eig_list, egv_list, ignore_h=True)
         print(f"\nA molden file, {molName}.molden, with the eigenvectors has been generated.\n")
 
     return EOS
-
-    
-
-
-
-
-
-
-
-
-
-
-'''
-transforma el mf ROHF en UHF
-pyscf.scf.addons.convert_to_uhf(mf, out=None, remove_df=False)
-'''
-
 
 
 
@@ -330,20 +376,20 @@ from pyscf import __config__
 from pyscf.tools.molden import *
 IGNORE_H = getattr(__config__, 'molden_ignore_h', True)
 
-def local_dump_scf(mf, filename, eig_list, egv_list, ignore_h=True):
+def local_dump_scf(myCalc, filename, eig_list, egv_list, ignore_h=True):
     import numpy as np
     import pyscf
     from pyscf.tools.molden import header, orbital_coeff
 
-    mol = mf.mol
-    mo_coeff = mf.mo_coeff
+    mol = myCalc.mol
+    mo_coeff = myCalc.mo_coeff
     with open(filename, 'w') as f:
         header(mol, f, ignore_h)
         # f.write("\n\n[DEBUG]: End header\n\n")
-        if isinstance(mf, pyscf.scf.uhf.UHF) or 'UHF' == mf.__class__.__name__:
-            occ_coeff_a = mf.mo_coeff[0][:, mf.mo_occ[0] > 0]
+        if isinstance(myCalc, pyscf.scf.uhf.UHF) or 'UHF' == myCalc.__class__.__name__:
+            occ_coeff_a = myCalc.mo_coeff[0][:, myCalc.mo_occ[0] > 0]
             coeff_a = np.dot(occ_coeff_a, np.array(egv_list[0][0]))
-            occ_coeff_b = mf.mo_coeff[1][:, mf.mo_occ[1] > 0]
+            occ_coeff_b = myCalc.mo_coeff[1][:, myCalc.mo_occ[1] > 0]
             coeff_b = np.dot(occ_coeff_b, np.array(egv_list[1][0]))
             # print(mo_coeff[0].shape, occ_coeff_a.shape, len(egv_list[0]), coeff_a.shape); exit()
             #orbital_coeff(mol, fout, mo_coeff, spin='Alpha', symm=None, ene=None, occ=None, ignore_h=IGNORE_H):
@@ -353,15 +399,12 @@ def local_dump_scf(mf, filename, eig_list, egv_list, ignore_h=True):
             orbital_coeff(mol, f, coeff_a, spin='Alpha', ene=eig_list[0][:nmo_a], occ=eig_list[0][:nmo_a], ignore_h=ignore_h)
             orbital_coeff(mol, f, coeff_b, spin='Beta', ene=eig_list[1][:nmo_b], occ=eig_list[1][:nmo_b], ignore_h=ignore_h)
         else:
-            occ_coeff = mf.mo_coeff[:, mf.mo_occ > 0]
+            occ_coeff = myCalc.mo_coeff[:, myCalc.mo_occ > 0]
             coeff = np.dot(occ_coeff, np.array(egv_list[0]))
 
             nmo = coeff.shape[1]
-            # print(f'[DEBUG]: len(mo_coeff)={len(mf.mo_coeff)}, shape={mf.mo_coeff.shape}, len(coeff)={len(coeff)}, {coeff.shape}, {len(eig_list)} \n{eig_list}')
-            orbital_coeff(mf.mol, f, coeff, ene=eig_list[:nmo], occ=eig_list[:nmo], ignore_h=ignore_h)
-
-
-
+            # print(f'[DEBUG]: len(mo_coeff)={len(myCalc.mo_coeff)}, shape={myCalc.mo_coeff.shape}, len(coeff)={len(coeff)}, {coeff.shape}, {len(eig_list)} \n{eig_list}')
+            orbital_coeff(myCalc.mol, f, coeff, ene=eig_list[:nmo], occ=eig_list[:nmo], ignore_h=ignore_h)
 
 
 def local_orbital_coeff(mol, fout, mo_coeff, spin='Alpha', symm=None, ene=None, occ=None, ignore_h=IGNORE_H):

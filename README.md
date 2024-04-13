@@ -12,6 +12,16 @@ This project is part of my final degree project.
 Quantum chemistry is the theory that is behind all the concepts that are being studied during the career, providing a solid basis to ambiguous concepts such as chemical bonding, reactivity or electron transfer reactions.
 Through the development of new computational algorithms, the objective of this project is to be able to explain these phenomena by performing computational calculations of these properties through the wave function.
 
+## Progress
+
+
+|                  | Hilbert                                ||||| 3D                  |||
+| ---------------- | -------- | ------ | ---------- | --- | --- | ---- | ------ | ----- |
+| Atom-In-Molecule | Mulliken | Lowdin | MetaLowdin | NAO | IAO | TFVC | Hirsh  | QTAIM |
+| APOST3D          | [x]      | [x]    | [ ]        | [ ] | [ ] | [x]  | [x]    | [ ]   |
+| This Project     | [x]      | [x]    | [x]        | [x] | [ ] | [ ]  | [ ]    | [ ]   |
+
+
 ## Quick start
 ### Setup
 ```bash

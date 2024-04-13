@@ -6,11 +6,11 @@ import numpy as np
 import funct as local
 import myApost3d as apost
 
-##main program##
+## main program ##
 with lib.with_omp_threads(8):
     print('Using ', lib.num_threads(),' threads')
 
-    ##Input calcul energia##
+    ## Energy Calculation ##
     molName = 'NaBH3' # CHANGE THIS
     mol=gto.M()
 
@@ -35,13 +35,16 @@ with lib.with_omp_threads(8):
     mf.init_guess = 'chkfile'
     mf.kernel()
 
-f1=[1]    
-f2 = list(range(2, 6)) #f1=[2,3,4,5] 
+f1 = [1]    
+f2 = list(range(2, 6)) #f2=[2,3,4,5] 
 frags=[f1,f2]
 
-print(f'\n\n[DEBUG]: Number of fragments: {len(frags)}')
-print(f'[DEBUG]: Fragments: {frags}')
-print(f'[DEBUG]: \n\tBasis: {mol.basis} \n\tNumber of basis functions: {mol.nao_nr()}')
+print(f'''\n\n[DEBUG]:
+    Number of fragments: {len(frags)}
+    Fragments: {frags}
+    Basis: {mol.basis}
+    Number of basis functions: {mol.nao_nr()}
+''')
 
 local.print_h1(molName)
 
