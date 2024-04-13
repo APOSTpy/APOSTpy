@@ -8,7 +8,7 @@ import myApost3d as apost
 ##main program##
 with lib.with_omp_threads(8):
     ##Input calcul energia##
-    molName = 'H2O+' # CHANGE THIS
+    molName = 'H2O_CASSCF' # CHANGE THIS
 
     print('Using ', lib.num_threads(),' threads')
 

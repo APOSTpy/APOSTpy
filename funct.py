@@ -37,10 +37,8 @@ def make_fragment_overlap(molName,mol,myCalc,Frags,calc):
 
     S = mol.intor_symmetric('int1e_ovlp')  #S = myCalc.get_ovlp()
     if calc!="mulliken":
-        if calc=="nao":
-            U_inv = lo.orth_ao(myCalc,calc,pre_orth_ao=None)
-        else:
-            U_inv = lo.orth_ao(mol,calc,pre_orth_ao=None)
+        if calc=="nao": U_inv = lo.orth_ao(myCalc,calc,pre_orth_ao=None)
+        else:           U_inv = lo.orth_ao(mol,calc,pre_orth_ao=None)
         U = np.linalg.inv(U_inv.T)
 
     natom = mol.natm
@@ -115,16 +113,17 @@ def make_fragment_overlap(molName,mol,myCalc,Frags,calc):
             Smo = []
             traza = 0 #DEBUG
             SCR = np.linalg.multi_dot((S,Dm,S))
+            #from functools import reduce;    SCR = reduce(numpy.dot, (S, Dm, S))
             occ, coeff = scipy.linalg.eigh(SCR,b=S)
-            occ = np.flip(occ)
-            print(f'[DEBUG]: no_occ: \n{occ}')
-            occ = occ/2
-            thresh = 1.e-8
+            occ, coeff = np.flip(occ), np.flip(coeff)
+            #print(f'[DEBUG]: no_occ: \n{occ}')
+            thresh = 1.0e-8
             coeff = coeff[: , occ > thresh]
+            occ = occ/2
             for i in range(nfrags):
-                SA = np.linalg.multi_dot((coeff.T, S_AO_frags[i], coeff))
+                #SA = np.linalg.multi_dot((coeff.T, S_AO_frags[i], coeff))
+                SA = np.dot(np.dot(coeff.T, S_AO_frags[i]), coeff)
                 dim = coeff.shape[1]
-                print(f'[DEBUG]: dim: {dim}')
                 traza += np.trace(SA) #DEBUG
                 print(f'[DEBUG]: tr_{i+1} = {np.trace(SA)}')
                 for j in range(dim):
@@ -331,7 +330,6 @@ def getEOS(molName, mol, myCalc, Frags, calc, genMolden=False):
 
     elif ("CASSCF" in kind_mf):
         Smo_a, Smo_b = make_fragment_overlap(molName,mol,myCalc,Frags,calc)
-        exit() #DEBUG
 
         print('\n------------------------------\n EFFAOs FROM THE ALPHA DENSITY \n------------------------------')
         EOS_a, R_a, eig_a, egv_a = getEOS_i(mol, myCalc, Frags, Smo_a, kindElecc="ALPHA")
