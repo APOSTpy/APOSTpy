@@ -68,7 +68,7 @@ def make_fragment_overlap(molName,mol,myCalc,Frags,calc):
         S_AO_frags.append(S_AO_frag_i)
     
     kind_mf = str(type(myCalc))
-    if ("RHS" in kind_mf or "RKS" in kind_mf):
+    if ("RHF" in kind_mf or "RKS" in kind_mf):
         occ_coeff = myCalc.mo_coeff[:, myCalc.mo_occ > 0] #Coefficients matrix of the occupied molecular orbitals
 
         Smo = []
@@ -123,15 +123,19 @@ def make_fragment_overlap(molName,mol,myCalc,Frags,calc):
                 #SA = np.linalg.multi_dot((coeff.T, S_AO_frags[i], coeff))
                 SA = np.dot(np.dot(coeff.T, S_AO_frags[i]), coeff)
                 dim = coeff.shape[1]
-                traza += np.trace(SA) #DEBUG
                 for j in range(dim):
                     for k in range(dim):
                         SA[j,k] = np.sqrt(occ[j]) * SA[j,k] * np.sqrt(occ[k])
                 Smo.append(SA)
-            print(f'[DEBUG]: traza = {traza}')
+                traza += np.trace(SA) #DEBUG
+                print(f'[DEBUG]: tr_{i+1} = {np.trace(SA)}')
+            print(f'[DEBUG]: sum traza = {traza}')
+            print(f'[DEBUG]: sum no_occ = {sum(occ)}')
             return Smo
         Smo_a = get_Smo(Dma)
         Smo_b = get_Smo(Dmb)
+        print(f'[DEBUG]: tr Dma = {np.trace(Dma)}')
+        print(f'[DEBUG]: Smo_a dim = {Dma[0].shape}')
         # print(f"[DEBUG]: Smo_a = {Smo_a}")
         # print(f"[DEBUG]: Smo_b = {Smo_b}")
         return Smo_a, Smo_b
@@ -166,10 +170,6 @@ def getEOS_i(mol, myCalc, Frags, Smo, kindElecc=None, genMolden=False):
             fra_list.append(ifrag)
             egv_list.append(eigenvectors)
 
-    # print(f'[DEBUG]: sorted list fragment1: {eig_list[0:Smo_dim]}')
-    # print(f'[DEBUG]: sorted list fragment 2: {eig_list[Smo_dim:]}')
-    # print(f'[DEBUG]: sorted list: {fra_list}')
-
 
     # idea(s) from chatgpt
     scr = list(zip(eig_list,fra_list,egv_list))
@@ -178,11 +178,11 @@ def getEOS_i(mol, myCalc, Frags, Smo, kindElecc=None, genMolden=False):
     # for i in range(len(scr)): #debug
     #     print("  ",scr[i], "\n","-"*30) if i==9 else print("  ",scr[i])
     eig_sorted, fra_sorted, egv_sorted = zip(*scr)
-    # print(f'[DEBUG]: sorted list: {eig_sorted[0:Smo_dim]}')
-    # print(f'[DEBUG]: sorted list: {fra_sorted[0:Smo_dim]}')
-    # print(f'[DEBUG]: sorted list: {egv_sorted[0:Smo_dim]}')
+    # print(f'[DEBUG]: eig sorted list: {eig_sorted[0:Smo_dim]}')
+    # print(f'[DEBUG]: fra sorted list: {fra_sorted[0:Smo_dim]}')
+    # print(f'[DEBUG]: egv sorted list: {egv_sorted[0:Smo_dim]}')
     
-    print(f'\nOccupied Atomic Orbitals ({Smo_dim}):')
+    print(f'\n[DEBUG]: Occupied Atomic Orbitals (eig_sorted, len={Smo_dim}):')
     efosPrint = ""
     for i, (eig) in enumerate(eig_sorted[:Smo_dim]):
         efosPrint += "%+.4f   " % round(eig, 4)
@@ -207,9 +207,13 @@ def getEOS_i(mol, myCalc, Frags, Smo, kindElecc=None, genMolden=False):
         print(f'Net occupation for fragment   {ifrag}    {round(sum(occup),5)}')
         print(f'Net occupation using >    {thresh}')
         print(f'OCCUP.  {net_occup}')
-
-
-    efos = Counter(fra_sorted[0:Smo_dim])
+    
+    # print(f'[DEBUG]: nelec: alpha={mol.nelec[0]}, beta={mol.nelec[1]}'); exit()
+    if (kindElecc=="alpha" or kindElecc==None):
+        nelec = mol.nelec[0]
+    elif (kindElecc=="beta"):
+        nelec = mol.nelec[1]
+    efos = Counter(fra_sorted[0:nelec])
     # print(f'[DEBUG]: {efos}')
 
     Zs = mol.atom_charges()
@@ -237,7 +241,7 @@ def getEOS_i(mol, myCalc, Frags, Smo, kindElecc=None, genMolden=False):
             first_unocc = efosFrag[countEfos]
         except:
             first_unocc = 0
-        print("   {:<8} {:<8}  {:<4.3f}      {:<4.3f}".format(ifrag, countEfos, last_occ, first_unocc) )
+        print("   {:<8} {:<8}  {:<+4.3f}      {:<+4.3f}".format(ifrag, countEfos, last_occ, first_unocc) )
         
         # get EOS
         Zfrag = 0
@@ -312,10 +316,10 @@ def getEOS(molName, mol, myCalc, Frags, calc, genMolden=False):
         Smo_a, Smo_b = make_fragment_overlap(molName,mol,myCalc,Frags,calc)
 
         print('\n------------------------------\n EFFAOs FROM THE ALPHA DENSITY \n------------------------------')
-        EOS_a, R_a, eig_a, egv_a = getEOS_i(mol, myCalc, Frags, Smo_a, kindElecc="ALPHA")
+        EOS_a, R_a, eig_a, egv_a = getEOS_i(mol, myCalc, Frags, Smo_a, kindElecc="alpha")
 
         print('\n------------------------------\n EFFAOs FROM THE BETA DENSITY \n------------------------------')
-        EOS_b, R_b, eig_b, egv_b = getEOS_i(mol, myCalc, Frags, Smo_b, kindElecc="BETA")
+        EOS_b, R_b, eig_b, egv_b = getEOS_i(mol, myCalc, Frags, Smo_b, kindElecc="beta")
 
         eig_list = (eig_a, eig_b)
         egv_list = (egv_a, egv_b)
@@ -328,10 +332,10 @@ def getEOS(molName, mol, myCalc, Frags, calc, genMolden=False):
         Smo_a, Smo_b = make_fragment_overlap(molName,mol,myCalc,Frags,calc)
 
         print('\n------------------------------\n EFFAOs FROM THE ALPHA DENSITY \n------------------------------')
-        EOS_a, R_a, eig_a, egv_a = getEOS_i(mol, myCalc, Frags, Smo_a, kindElecc="ALPHA")
+        EOS_a, R_a, eig_a, egv_a = getEOS_i(mol, myCalc, Frags, Smo_a, kindElecc="alpha")
 
         print('\n------------------------------\n EFFAOs FROM THE BETA DENSITY \n------------------------------')
-        EOS_b, R_b, eig_b, egv_b = getEOS_i(mol, myCalc, Frags, Smo_b, kindElecc="BETA")
+        EOS_b, R_b, eig_b, egv_b = getEOS_i(mol, myCalc, Frags, Smo_b, kindElecc="beta")
 
         EOS = 'This function is not finished'
 

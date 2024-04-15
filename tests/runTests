@@ -3,9 +3,12 @@
 # ./runTests [molecc]
 # If no file is specified as an argument, the script executes all `*.py` from the current directory.
 
+exclude_files="func.py myApost3d.py optimize.py cords.py"
+
 if [ -z $1 ]; then
-  files=$(ls *_main.py)
+  files=$(ls *.py)
   for file in $files; do
+    if [[ "$exclude_files" == *"${file%.py}"* ]]; then continue; fi
     name=$(echo $file | sed 's/.py//')
     python3 "$file" > "$name.pyout"
   done
