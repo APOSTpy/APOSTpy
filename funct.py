@@ -108,24 +108,22 @@ def make_fragment_overlap(molName,mol,myCalc,Frags,calc):
         return Smo
         '''
         # From Spin Natural Orbitals
-        Dma, Dmb = mcscf.make_rdm1s(myCalc) #is mc
+        Dma, Dmb = mcscf.addons.make_rdm1s(myCalc) #is mc
         def get_Smo(Dm):
             Smo = []
             traza = 0 #DEBUG
             SCR = np.linalg.multi_dot((S,Dm,S))
             #from functools import reduce;    SCR = reduce(numpy.dot, (S, Dm, S))
             occ, coeff = scipy.linalg.eigh(SCR,b=S)
-            occ, coeff = np.flip(occ), np.flip(coeff)
-            #print(f'[DEBUG]: no_occ: \n{occ}')
+            occ, coeff = np.flip(occ), np.flip(coeff, axis=1)
+            print(f'[DEBUG]: no_occ: \n{occ}')
             thresh = 1.0e-8
             coeff = coeff[: , occ > thresh]
-            occ = occ/2
             for i in range(nfrags):
                 #SA = np.linalg.multi_dot((coeff.T, S_AO_frags[i], coeff))
                 SA = np.dot(np.dot(coeff.T, S_AO_frags[i]), coeff)
                 dim = coeff.shape[1]
                 traza += np.trace(SA) #DEBUG
-                print(f'[DEBUG]: tr_{i+1} = {np.trace(SA)}')
                 for j in range(dim):
                     for k in range(dim):
                         SA[j,k] = np.sqrt(occ[j]) * SA[j,k] * np.sqrt(occ[k])
@@ -198,7 +196,6 @@ def getEOS_i(mol, myCalc, Frags, Smo, kindElecc=None, genMolden=False):
         net_occup = ""
         occup = eig_list[ (ifrag-1)*Smo_dim : (ifrag*Smo_dim) ]
         occup.sort(reverse=True)
-        # for eig in occup:
         thresh = 0.00100
         for i, (eig) in enumerate(occup):
             if round(eig,4) > thresh:
@@ -313,8 +310,7 @@ def getEOS(molName, mol, myCalc, Frags, calc, genMolden=False):
             myCalc = pyscf.scf.addons.convert_to_uhf(myCalc, out=None, remove_df=False)
 
         Smo_a, Smo_b = make_fragment_overlap(molName,mol,myCalc,Frags,calc)
-        print(f"[DEBUG]: len Smo_a = {len(Smo_a)}")
-        print(f"[DEBUG]: len Smo_b = {len(Smo_b)}")
+
         print('\n------------------------------\n EFFAOs FROM THE ALPHA DENSITY \n------------------------------')
         EOS_a, R_a, eig_a, egv_a = getEOS_i(mol, myCalc, Frags, Smo_a, kindElecc="ALPHA")
 
