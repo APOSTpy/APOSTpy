@@ -254,7 +254,7 @@ def getEOS_i(mol, myCalc, Frags, Smo, kindElecc=None, genMolden=False):
     print('-'*(12*4-6))
 
 
-    # si first unocc is from the same frag, second unocc
+    # if first unocc is from the same frag, take second unocc
     jump=0
     last_occ = scr[Smo_dim-1]
     first_unocc = scr[Smo_dim+jump]
