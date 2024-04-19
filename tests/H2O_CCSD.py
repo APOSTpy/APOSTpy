@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-from pyscf import gto, scf, lib, tools, mcscf
+from pyscf import gto, scf, lib, tools, mcscf, cc
 import numpy as np
 import funct as local
 import myApost3d as apost
@@ -8,38 +8,43 @@ import myApost3d as apost
 ##main program##
 with lib.with_omp_threads(8):
     ##Input calcul energia##
-    molName = 'H2O_CASSCF' # CHANGE THIS
+    molName = 'H2O_CCSD' # CHANGE THIS
 
     print('Using ', lib.num_threads(),' threads')
 
-    mol=gto.M()
+    mol = gto.M()
 
-    mol.basis='def2svp'
+    mol.basis = 'def2svp'
     mol.charge = 0
     mol.spin = 0
-    mol.atom='''
+    mol.atom = '''
     H   -0.0211   -0.0020    0.0000
     H    1.4769   -0.2730    0.0000
     O    0.8345    0.4519    0.0000
     '''
 
-    mol.cart= False
+    mol.cart = False
     mol.symmetry = True 
-    mol.verbose=4
+    mol.verbose = 4
     mol.build() 
 
     mf = scf.RHF(mol)
-    # mf.chkfile = molName + '.chk'
-    # mf.init_guess = 'chkfile'
+    mf.chkfile = molName + '.chk'
+    mf.init_guess = 'chkfile'
     mf.kernel()
 
-    mc = mcscf.CASSCF(mf, 6, 6)
+    mycc = cc.CCSD(mf)
     try:
-        mc.chkfile = molName + '_casscf.chk'
-        mo = lib.chkfile.load(mc.chkfile, 'mcscf/mo_coeff')
-        mc.kernel(mo)
+        print("\nUsing checkpoint...")
+        mol = lib.chkfile.load_mol(mf.chkfile)
+        mf = scf.HF(mol)
+        mf.__dict__.update(lib.chkfile.load(mf.chkfile, 'scf'))
+        mycc = cc.CCSD(mf)
+        mycc.restore_from_diis_(molName + '_ccdiis.h5')
+        mycc.kernel(mycc.t1, mycc.t2)
     except:
-        mc.kernel()
+        mycc.diis_file = molName + '_ccdiis.h5'
+        mycc.kernel()
 
 frags=[[1],[2],[3]]
 
@@ -52,10 +57,8 @@ print(f'''\n\n[DEBUG]:
 
 local.print_h1(molName)
 
-myCalc = mc
-apost.write_fchk(mol, myCalc, molName,mf.get_ovlp())
+myCalc = mycc
+apost.write_fchk(mol, myCalc, molName, mf.get_ovlp())
 local.getEOS(molName, mol, myCalc, frags, calc='lowdin', genMolden=False)
 
 # tools.molden.from_mo(mol, 'test_H2O.molden', mf.mo_coeff, spin='Alpha', symm=None, ene=None, occ=None, ignore_h=True)
-
-tools.molden.from_mcscf(mc, 'test_H2O_CASSCF.molden', ignore_h=True, cas_natorb=False)

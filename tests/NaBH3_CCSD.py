@@ -1,17 +1,17 @@
 #!/usr/bin/env python
 
-from pyscf import gto, scf, lib, tools
-from pyscf.scf import addons
+from pyscf import gto, scf, lib, tools, mcscf, cc
 import numpy as np
 import funct as local
 import myApost3d as apost
 
-## main program ##
+##main program##
 with lib.with_omp_threads(8):
     print('Using ', lib.num_threads(),' threads')
 
-    ## Energy Calculation ##
-    molName = 'NaBH3' # CHANGE THIS
+    ##Input calcul energia##
+    molName = 'NaBH3_CCSD' # CHANGE THIS
+
     mol=gto.M()
 
     mol.basis='aug-cc-pvdz'
@@ -29,15 +29,28 @@ with lib.with_omp_threads(8):
     f2 = list(range(2, 6)) #f2=[2,3,4,5] 
     frags=[f1,f2]
 
-    mol.cart= False
+    mol.cart = False
     mol.symmetry = True 
-    mol.verbose=4
-    mol.build() 
+    mol.verbose = 4
+    mol.build()
 
-    mf = scf.UHF(mol)
+    mf = scf.RHF(mol)
     mf.chkfile = molName + '.chk'
     mf.init_guess = 'chkfile'
     mf.kernel()
+
+    mycc = cc.CCSD(mf)
+    try:
+        print("\nUsing checkpoint...")
+        mol = lib.chkfile.load_mol(mf.chkfile)
+        mf = scf.HF(mol)
+        mf.__dict__.update(lib.chkfile.load(mf.chkfile, 'scf'))
+        mycc = cc.CCSD(mf)
+        mycc.restore_from_diis_(molName + '_ccdiis.h5')
+        mycc.kernel(mycc.t1, mycc.t2)
+    except:
+        mycc.diis_file = molName + '_ccdiis.h5'
+        mycc.kernel()
 
 print(f'''\n\n[DEBUG]:
     Number of fragments: {len(frags)}
@@ -48,7 +61,8 @@ print(f'''\n\n[DEBUG]:
 
 local.print_h1(molName)
 
-apost.write_fchk(mol, mf, molName,mf.get_ovlp())
+myCalc = mycc
+# apost.write_fchk(mol, myCalc, molName, mf.get_ovlp())
+local.getEOS(molName, mol, myCalc, frags, calc='lowdin', genMolden=False)
 
-local.getEOS(molName, mol, mf, frags, calc='lowdin', genMolden=True)
-
+# tools.molden.from_mo(mol, 'test_H2O.molden', mf.mo_coeff, spin='Alpha', symm=None, ene=None, occ=None, ignore_h=True)

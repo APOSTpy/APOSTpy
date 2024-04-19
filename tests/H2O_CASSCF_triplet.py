@@ -8,7 +8,7 @@ import myApost3d as apost
 ##main program##
 with lib.with_omp_threads(8):
     ##Input calcul energia##
-    molName = 'H2O_CASSCF' # CHANGE THIS
+    molName = 'H2O_CASSCF_s2' # CHANGE THIS
 
     print('Using ', lib.num_threads(),' threads')
 
@@ -16,7 +16,7 @@ with lib.with_omp_threads(8):
 
     mol.basis='def2svp'
     mol.charge = 0
-    mol.spin = 0
+    mol.spin = 2
     mol.atom='''
     H   -0.0211   -0.0020    0.0000
     H    1.4769   -0.2730    0.0000
@@ -33,7 +33,7 @@ with lib.with_omp_threads(8):
     # mf.init_guess = 'chkfile'
     mf.kernel()
 
-    mc = mcscf.CASSCF(mf, 6, 6)
+    mc = mcscf.CASSCF(mf, 6, (4,2))
     try:
         mc.chkfile = molName + '_casscf.chk'
         mo = lib.chkfile.load(mc.chkfile, 'mcscf/mo_coeff')
@@ -54,8 +54,10 @@ local.print_h1(molName)
 
 myCalc = mc
 apost.write_fchk(mol, myCalc, molName,mf.get_ovlp())
+apost.write_dm12(mol, myCalc, molName)
+
 local.getEOS(molName, mol, myCalc, frags, calc='lowdin', genMolden=False)
 
 # tools.molden.from_mo(mol, 'test_H2O.molden', mf.mo_coeff, spin='Alpha', symm=None, ene=None, occ=None, ignore_h=True)
 
-tools.molden.from_mcscf(mc, 'test_H2O_CASSCF.molden', ignore_h=True, cas_natorb=False)
+# tools.molden.from_mcscf(mc, 'test_H2O_CASSCF.molden', ignore_h=True, cas_natorb=False)
