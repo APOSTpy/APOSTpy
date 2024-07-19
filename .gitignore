@@ -4,4 +4,5 @@ __pycache__
 *_workdir
 /tests/*
 !/tests/*.py
+!/tests/*.pyout
 !/tests/runTests

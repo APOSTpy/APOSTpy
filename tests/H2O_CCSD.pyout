@@ -1,0 +1,90 @@
+Using  8  threads
+
+
+******** <class 'pyscf.scf.hf_symm.SymAdaptedRHF'> ********
+method = SymAdaptedRHF
+initial guess = chkfile
+damping factor = 0
+level_shift factor = 0
+DIIS = <class 'pyscf.scf.diis.CDIIS'>
+diis_start_cycle = 1
+diis_space = 8
+diis_damp = 0
+SCF conv_tol = 1e-09
+SCF conv_tol_grad = None
+SCF max_cycles = 50
+direct_scf = True
+direct_scf_tol = 1e-13
+chkfile to save SCF result = H2O_CCSD.chk
+max_memory 4000 MB (current use 66 MB)
+Freeze 0 electrons in irreps []
+    10 free electrons in irreps A' A"
+Set gradient conv threshold to 3.16228e-05
+init E= -75.9601546316549
+HOMO (A") = -0.497593196897091  LUMO (A') = 0.174298334630366
+cycle= 1 E= -75.9601546316584  delta_E= -3.47e-12  |g|= 1.13e-06  |ddm|= 3.44e-06
+HOMO (A") = -0.497592848434078  LUMO (A') = 0.174298325802602
+Extra cycle  E= -75.960154631659  delta_E= -5.83e-13  |g|= 5.07e-07  |ddm|= 1.51e-06
+converged SCF energy = -75.960154631659
+
+Using checkpoint...
+
+******** <class 'pyscf.cc.ccsd.CCSD'> ********
+CC2 = 0
+CCSD nocc = 5, nmo = 24
+max_cycle = 50
+direct = 0
+conv_tol = 1e-07
+conv_tol_normt = 1e-05
+diis_space = 6
+diis_start_cycle = 0
+diis_start_energy_diff = 1e+09
+max_memory 4000 MB (current use 75 MB)
+Init t2, MP2 energy = -76.164562740128  E_corr(MP2) -0.204408108469018
+Init E_corr(CCSD) = -0.204408108469132
+cycle = 1  E_corr(CCSD) = -0.209237980467212  dE = -0.004829872  norm(t1,t2) = 0.0221204
+cycle = 2  E_corr(CCSD) = -0.212537892436172  dE = -0.00329991197  norm(t1,t2) = 0.00774507
+cycle = 3  E_corr(CCSD) = -0.213613459266493  dE = -0.00107556683  norm(t1,t2) = 0.00296638
+cycle = 4  E_corr(CCSD) = -0.213775601495091  dE = -0.000162142229  norm(t1,t2) = 0.000593404
+cycle = 5  E_corr(CCSD) = -0.213759538957404  dE = 1.60625377e-05  norm(t1,t2) = 0.000194881
+cycle = 6  E_corr(CCSD) = -0.213754677496833  dE = 4.86146057e-06  norm(t1,t2) = 5.53815e-05
+cycle = 7  E_corr(CCSD) = -0.21375638442386  dE = -1.70692703e-06  norm(t1,t2) = 1.8002e-05
+cycle = 8  E_corr(CCSD) = -0.213755835270805  dE = 5.49153056e-07  norm(t1,t2) = 3.41007e-06
+cycle = 9  E_corr(CCSD) = -0.213755786824779  dE = 4.84460261e-08  norm(t1,t2) = 9.53522e-07
+CCSD converged
+E(CCSD) = -76.17391041848377  E_corr = -0.2137557868247786
+
+
+[DEBUG]:
+    Number of fragments: 3
+    Fragments: [[1], [2], [3]]
+    Basis: def2svp
+    Number of basis functions: 24
+
+
+
+
+-------------------------------------------------------------------------------------
+                             CALCULATION FOR H2O_CCSD                              
+-------------------------------------------------------------------------------------
+
+cycle = 1  norm(lambda1,lambda2) = 0.00448493
+cycle = 2  norm(lambda1,lambda2) = 0.000857492
+cycle = 3  norm(lambda1,lambda2) = 0.000383495
+cycle = 4  norm(lambda1,lambda2) = 0.000121929
+cycle = 5  norm(lambda1,lambda2) = 4.37932e-05
+cycle = 6  norm(lambda1,lambda2) = 8.64075e-06
+[DEBUG]: Kind of calculation: <class 'pyscf.cc.ccsd.CCSD'>
+[DEBUG]: no_occ: 
+[3.35379108e+00 1.97672027e+00 1.96734594e+00 1.94735701e+00
+ 6.28041193e-01 2.36646855e-02 1.72225546e-02 1.24986987e-02
+ 1.10369639e-02 5.49166121e-03 4.53842908e-03 4.08286193e-03
+ 3.25815679e-03 2.02257599e-03 9.77100014e-04 8.26055572e-04
+ 5.90166900e-04 4.27491913e-04 4.00484676e-04 2.45727240e-04
+ 1.96353293e-04 1.14314411e-04 1.98544029e-05 8.79012092e-06]
+[DEBUG]: tr_1 = 5.000000000000005
+[DEBUG]: tr_2 = 4.999999999999991
+[DEBUG]: tr_3 = 13.999999999999996
+[DEBUG]: sum traza = 23.999999999999993
+[DEBUG]: sum no_occ = 9.960878413342511
+[DEBUG]: Smo_dim = 24, Smo_len = 3

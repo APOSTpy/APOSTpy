@@ -68,7 +68,6 @@ print(f'''\n\n[DEBUG]:
 ''')
 
 
-
 myAPOST3D.write_fchk(mol, mf, molName,mf.get_ovlp())
 
 APOSTpy.getEOS(molName, mol, mf, frags, calc='lowdin', genMolden=True)

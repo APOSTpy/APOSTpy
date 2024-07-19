@@ -1,0 +1,63 @@
+Using  8  threads
+
+
+[DEBUG]:
+    Number of fragments: 2
+    Fragments: [[1], [2, 3, 4, 5]]
+    Basis: aug-cc-pvdz
+    Number of basis functions: 59
+
+
+
+
+-------------------------------------------------------------------------------------
+                                CALCULATION FOR BH4                                
+-------------------------------------------------------------------------------------
+
+[DEBUG]: Kind of calculation: <class 'pyscf.scf.hf_symm.SymAdaptedRHF'>
+
+[DEBUG]: Occupied Atomic Orbitals (eig_sorted, len=5):
++0.9815   +0.7145   +0.5388   +0.5388   +0.5344    
+
+
+** FRAGMENT   1 **
+
+Net occupation for fragment   1    2.6551
+Net occupation using >    0.001
+OCCUP.  +0.9815   +0.4656   +0.4612   +0.4612   +0.2855   
+
+** FRAGMENT   2 **
+
+Net occupation for fragment   2    2.3449
+Net occupation using >    0.001
+OCCUP.  +0.7145   +0.5388   +0.5388   +0.5344   +0.0185   
+
+----------------------------------
+ EOS ANALYSIS FOR ALPHA ELECTRONS 
+----------------------------------
+
+ Frag.    Elect.    Last occ.  First unocc. 
+------------------------------------------
+   1        1         +0.981      +0.466
+   2        4         +0.534      +0.019
+------------------------------------------
+RELIABILITY INDEX R(%) = 56.87
+
+
+ ************************** Calculation for ALPHA electrons **************************
+
+---------------------------
+ FRAGMENT OXIDATION STATES 
+---------------------------
+
+ Frag.  Oxidation State 
+------------------------
+   1           3   
+   2          -4   
+------------------------
+ Sum:  -1
+
+OVERALL RELIABILITY INDEX R(%) = 56.87
+
+A molden file, BH4.molden, with the eigenvectors has been generated.
+

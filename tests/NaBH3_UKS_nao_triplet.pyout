@@ -1,0 +1,182 @@
+Using  4  threads
+
+
+******** <class 'pyscf.dft.uks.UKS'> ********
+method = UKS
+initial guess = chkfile
+damping factor = 0
+level_shift factor = 0
+DIIS = <class 'pyscf.scf.diis.CDIIS'>
+diis_start_cycle = 1
+diis_space = 8
+diis_damp = 0
+SCF conv_tol = 1e-09
+SCF conv_tol_grad = None
+SCF max_cycles = 50
+direct_scf = True
+direct_scf_tol = 1e-13
+chkfile to save SCF result = NaBH3_UKS_nao_triplet.chk
+max_memory 4000 MB (current use 64 MB)
+number electrons alpha = 11  beta = 9
+XC library pyscf.dft.libxc version 6.2.2
+    S. Lehtola, C. Steigemann, M. J.T. Oliveira, and M. A.L. Marques.,  SoftwareX 7, 1–5 (2018)
+XC functionals = b3lyp
+    P. A. M. Dirac.,  Math. Proc. Cambridge Philos. Soc. 26, 376 (1930)
+    F. Bloch.,  Z. Phys. 57, 545 (1929)
+    A. D. Becke.,  Phys. Rev. A 38, 3098 (1988)
+    C. Lee, W. Yang, and R. G. Parr.,  Phys. Rev. B 37, 785 (1988)
+    B. Miehlich, A. Savin, H. Stoll, and H. Preuss.,  Chem. Phys. Lett. 157, 200 (1989)
+    S. H. Vosko, L. Wilk, and M. Nusair.,  Can. J. Phys. 58, 1200 (1980)
+radial grids: 
+    Treutler-Ahlrichs [JCP 102, 346 (1995); DOI:10.1063/1.469408] (M4) radial grids
+    
+becke partition: Becke, JCP 88, 2547 (1988); DOI:10.1063/1.454033
+pruning grids: <function nwchem_prune at 0x2aea9bc89940>
+grids dens level: 3
+symmetrized grids: False
+atomic radii adjust function: <function treutler_atomic_radii_adjust at 0x2aea9bc89ee0>
+small_rho_cutoff = 1e-07
+Set gradient conv threshold to 3.16228e-05
+tot grids = 60472
+init E= -188.893895368259
+  alpha nocc = 11  HOMO = 0.0847869584142277  LUMO = 0.0957438476009748
+  beta  nocc = 9  HOMO = -0.154727244886035  LUMO = 0.0269461318964336
+
+WARN: system HOMO 0.0940521267126862 >= system LUMO 0.0269461318964336
+
+cycle= 1 E= -188.868877931468  delta_E= 0.025  |g|= 0.0479  |ddm|= 1.97
+  alpha nocc = 11  HOMO = 0.0395921779023409  LUMO = 0.0808429881643594
+  beta  nocc = 9  HOMO = -0.136236199874564  LUMO = 0.0506842431370176
+cycle= 2 E= -188.872958422542  delta_E= -0.00408  |g|= 0.0459  |ddm|= 0.994
+  alpha nocc = 11  HOMO = 0.0386257756762863  LUMO = 0.0854838172238515
+  beta  nocc = 9  HOMO = -0.14823653355658  LUMO = 0.061000558769445
+cycle= 3 E= -188.875033302491  delta_E= -0.00207  |g|= 0.00955  |ddm|= 0.156
+  alpha nocc = 11  HOMO = 0.0434816185171916  LUMO = 0.0891813716914927
+  beta  nocc = 9  HOMO = -0.141335194946999  LUMO = 0.0698306352083118
+cycle= 4 E= -188.875195507596  delta_E= -0.000162  |g|= 0.00311  |ddm|= 0.0919
+  alpha nocc = 11  HOMO = 0.0441674521137395  LUMO = 0.0900672676372137
+  beta  nocc = 9  HOMO = -0.138953049588783  LUMO = 0.0716722022247732
+cycle= 5 E= -188.87523035709  delta_E= -3.48e-05  |g|= 0.00133  |ddm|= 0.0583
+  alpha nocc = 11  HOMO = 0.0444240092245939  LUMO = 0.0901838287744381
+  beta  nocc = 9  HOMO = -0.137762501633597  LUMO = 0.0720044270616918
+cycle= 6 E= -188.875235654765  delta_E= -5.3e-06  |g|= 0.000269  |ddm|= 0.0239
+  alpha nocc = 11  HOMO = 0.0443957904397518  LUMO = 0.0901135093685555
+  beta  nocc = 9  HOMO = -0.137599191787623  LUMO = 0.0718996900114728
+cycle= 7 E= -188.875235932041  delta_E= -2.77e-07  |g|= 7.21e-05  |ddm|= 0.00486
+  alpha nocc = 11  HOMO = 0.0444086195315354  LUMO = 0.0901106428453437
+  beta  nocc = 9  HOMO = -0.137553806826406  LUMO = 0.0719074924468836
+cycle= 8 E= -188.875235944947  delta_E= -1.29e-08  |g|= 1.08e-05  |ddm|= 0.000786
+  alpha nocc = 11  HOMO = 0.0444127980520617  LUMO = 0.090113408057277
+  beta  nocc = 9  HOMO = -0.137546934315209  LUMO = 0.0719152739925025
+cycle= 9 E= -188.875235945297  delta_E= -3.5e-10  |g|= 1.83e-06  |ddm|= 0.000116
+  alpha nocc = 11  HOMO = 0.0444123538365829  LUMO = 0.0901132064050543
+  beta  nocc = 9  HOMO = -0.137548910879249  LUMO = 0.0719149588568198
+Extra cycle  E= -188.875235945302  delta_E= -4.72e-12  |g|= 1.53e-06  |ddm|= 1.24e-05
+converged SCF energy = -188.875235945302  <S^2> = 2.0026583  2S+1 = 3.0017717
+
+
+[DEBUG]:
+    Number of fragments: 2
+    Fragments: [[1, 2, 3, 4], [5]]
+    Basis: cc-pvtz
+    Number of basis functions: 106
+
+
+
+
+-------------------------------------------------------------------------------------
+                       CALCULATION FOR NaBH3_UKS_nao_triplet                       
+-------------------------------------------------------------------------------------
+
+[DEBUG]: Kind of calculation: <class 'pyscf.dft.uks.UKS'>
+
+------------------------------
+ EFFAOs FROM THE ALPHA DENSITY 
+------------------------------
+[DEBUG]: Smo_dim = 11, Smo_len = 2
+
+[DEBUG]: EFO Occupations (eig_sorted, len=11):
++1.0000   +1.0000   +1.0000   +1.0000   +1.0000   +1.0000   +0.9995   +0.9994   
++0.9994   +0.9686   +0.9226   +0.0774   +0.0314   +0.0006   +0.0006   +0.0005   
++0.0000   +0.0000   +0.0000   +0.0000   +0.0000   +0.0000   
+
+** FRAGMENT   1 **
+
+Net occupation for fragment   1    4.9524
+Net occupation using >    0.001
+OCCUP.  +1.0000   +0.9995   +0.9994   +0.9994   +0.9226   +0.0314   
+
+** FRAGMENT   2 **
+
+Net occupation for fragment   2    6.0476
+Net occupation using >    0.001
+OCCUP.  +1.0000   +1.0000   +1.0000   +1.0000   +1.0000   +0.9686   +0.0774   
+[DEBUG]: nelec: alpha=11, beta=9
+[DEBUG]: occ_list = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1.0]
+[DEBUG]: EFOs = {1: 5.0, 2: 6}
+
+----------------------------------
+ EOS ANALYSIS FOR alpha ELECTRONS 
+----------------------------------
+
+ Frag.    Elect.    Last occ.  First unocc. 
+------------------------------------------
+   1       5.0       +0.923      +0.031
+   2       6.0       +0.969      +0.077
+------------------------------------------
+RELIABILITY INDEX R(%) = 100
+
+------------------------------
+ EFFAOs FROM THE BETA DENSITY 
+------------------------------
+[DEBUG]: Smo_dim = 9, Smo_len = 2
+
+[DEBUG]: EFO Occupations (eig_sorted, len=9):
++1.0000   +1.0000   +1.0000   +1.0000   +1.0000   +1.0000   +0.9995   +0.9995   
++0.9955   +0.0045   +0.0005   +0.0005   +0.0000   +0.0000   +0.0000   +0.0000   
++0.0000   +0.0000   
+
+** FRAGMENT   1 **
+
+Net occupation for fragment   1    3.99444
+Net occupation using >    0.001
+OCCUP.  +1.0000   +0.9995   +0.9995   +0.9955   
+
+** FRAGMENT   2 **
+
+Net occupation for fragment   2    5.00556
+Net occupation using >    0.001
+OCCUP.  +1.0000   +1.0000   +1.0000   +1.0000   +1.0000   +0.0045   
+[DEBUG]: nelec: alpha=11, beta=9
+[DEBUG]: occ_list = [1, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0]
+[DEBUG]: EFOs = {1: 4.0, 2: 5.0}
+
+----------------------------------
+ EOS ANALYSIS FOR beta ELECTRONS 
+----------------------------------
+
+ Frag.    Elect.    Last occ.  First unocc. 
+------------------------------------------
+   1       4.0       +0.995      +0.000
+   2       5.0       +1.000      +0.005
+------------------------------------------
+RELIABILITY INDEX R(%) = 100
+
+---------------------------
+ FRAGMENT OXIDATION STATES 
+---------------------------
+
+ Frag.  Oxidation State 
+------------------------
+   1         -1.0
+   2         +0.0
+------------------------
+ Sum:        -1.0
+
+OVERALL RELIABILITY INDEX R(%) = 100.0
+Generating Molden file with EFOs
+Number of fragments: 2
+Total number of EFOs: 18
+
+A molden file, NaBH3_UKS_nao_triplet.molden, with the eigenvectors has been generated.
+

@@ -1,0 +1,135 @@
+Using  4  threads
+
+
+******** <class 'pyscf.dft.rks.RKS'> ********
+method = RKS
+initial guess = chkfile
+damping factor = 0
+level_shift factor = 0
+DIIS = <class 'pyscf.scf.diis.CDIIS'>
+diis_start_cycle = 1
+diis_space = 8
+diis_damp = 0
+SCF conv_tol = 1e-09
+SCF conv_tol_grad = None
+SCF max_cycles = 50
+direct_scf = True
+direct_scf_tol = 1e-13
+chkfile to save SCF result = NaBH3_RKS_NAO.chk
+max_memory 4000 MB (current use 64 MB)
+XC library pyscf.dft.libxc version 6.2.2
+    S. Lehtola, C. Steigemann, M. J.T. Oliveira, and M. A.L. Marques.,  SoftwareX 7, 1–5 (2018)
+XC functionals = b3lyp
+    P. A. M. Dirac.,  Math. Proc. Cambridge Philos. Soc. 26, 376 (1930)
+    F. Bloch.,  Z. Phys. 57, 545 (1929)
+    A. D. Becke.,  Phys. Rev. A 38, 3098 (1988)
+    C. Lee, W. Yang, and R. G. Parr.,  Phys. Rev. B 37, 785 (1988)
+    B. Miehlich, A. Savin, H. Stoll, and H. Preuss.,  Chem. Phys. Lett. 157, 200 (1989)
+    S. H. Vosko, L. Wilk, and M. Nusair.,  Can. J. Phys. 58, 1200 (1980)
+radial grids: 
+    Treutler-Ahlrichs [JCP 102, 346 (1995); DOI:10.1063/1.469408] (M4) radial grids
+    
+becke partition: Becke, JCP 88, 2547 (1988); DOI:10.1063/1.454033
+pruning grids: <function nwchem_prune at 0x2b629f6f1800>
+grids dens level: 3
+symmetrized grids: False
+atomic radii adjust function: <function treutler_atomic_radii_adjust at 0x2b629f6f1da0>
+small_rho_cutoff = 1e-07
+Set gradient conv threshold to 3.16228e-05
+
+WARN: Fail in reading NaBH3_RKS_NAO.chk. Use MINAO initial guess
+
+Initial guess from minao.
+tot grids = 60472
+init E= -188.617440010415
+  HOMO = -0.161450190217443  LUMO = -0.0757352201027144
+cycle= 1 E= -188.624863331746  delta_E= -0.00742  |g|= 0.644  |ddm|= 1.35
+  HOMO = 0.0924382175725414  LUMO = 0.105958573614027
+cycle= 2 E= -185.211954798452  delta_E= 3.41  |g|= 1.58  |ddm|= 3.67
+  HOMO = 0.0206624559587221  LUMO = 0.0805018430418464
+cycle= 3 E= -188.876604427016  delta_E= -3.66  |g|= 0.158  |ddm|= 3.51
+  HOMO = 0.0373607913884946  LUMO = 0.0973418328879782
+cycle= 4 E= -188.864634518426  delta_E= 0.012  |g|= 0.171  |ddm|= 0.889
+  HOMO = 0.0339682447136577  LUMO = 0.0942859393890093
+cycle= 5 E= -188.891347442121  delta_E= -0.0267  |g|= 0.0511  |ddm|= 0.339
+  HOMO = 0.0285426668875655  LUMO = 0.0903535159758602
+cycle= 6 E= -188.892873393911  delta_E= -0.00153  |g|= 0.0214  |ddm|= 0.0656
+  HOMO = 0.0261442917553706  LUMO = 0.0885752115060192
+cycle= 7 E= -188.893251178562  delta_E= -0.000378  |g|= 0.00286  |ddm|= 0.0559
+  HOMO = 0.026291249467546  LUMO = 0.0885840196515714
+cycle= 8 E= -188.893257159781  delta_E= -5.98e-06  |g|= 0.00129  |ddm|= 0.0106
+  HOMO = 0.0263452886923392  LUMO = 0.0886317038350547
+cycle= 9 E= -188.893258576417  delta_E= -1.42e-06  |g|= 5.68e-05  |ddm|= 0.00309
+  HOMO = 0.0263300379570295  LUMO = 0.0886190253553783
+cycle= 10 E= -188.893258579727  delta_E= -3.31e-09  |g|= 4.75e-06  |ddm|= 0.000324
+  HOMO = 0.0263318311688982  LUMO = 0.0886202738624466
+cycle= 11 E= -188.893258579748  delta_E= -2.04e-11  |g|= 2.09e-06  |ddm|= 2.5e-05
+  HOMO = 0.0263317516633924  LUMO = 0.088620381226683
+Extra cycle  E= -188.893258579727  delta_E= 2.04e-11  |g|= 5.88e-06  |ddm|= 1.72e-05
+converged SCF energy = -188.893258579727
+
+
+[DEBUG]:
+    Number of fragments: 2
+    Fragments: [[1, 2, 3, 4], [5]]
+    Basis: cc-pvtz
+    Number of basis functions: 106
+
+[DEBUG]: Kind of calculation: <class 'pyscf.dft.rks.RKS'>
+[DEBUG]: Smo_dim = 10, Smo_len = 2
+
+[DEBUG]: EFO Occupations (eig_sorted, len=10):
++1.0000   +1.0000   +1.0000   +1.0000   +1.0000   +1.0000   +0.9991   +0.9990   
++0.9990   +0.7200   +0.2800   +0.0010   +0.0010   +0.0009   +0.0000   +0.0000   
++0.0000   +0.0000   +0.0000   +0.0000   
+
+** FRAGMENT   1 **
+
+Net occupation for fragment   1    4.27713
+Net occupation using >    0.001
+OCCUP.  +1.0000   +0.9991   +0.9990   +0.9990   +0.2800   
+
+** FRAGMENT   2 **
+
+Net occupation for fragment   2    5.72287
+Net occupation using >    0.001
+OCCUP.  +1.0000   +1.0000   +1.0000   +1.0000   +1.0000   +0.7200   
+[DEBUG]: nelec: alpha=10, beta=10
+[DEBUG]: occ_list = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1.0]
+[DEBUG]: EFOs = {1: 4, 2: 6.0}
+
+----------------------------------
+ EOS ANALYSIS FOR ALPHA ELECTRONS 
+----------------------------------
+
+ Frag.    Elect.    Last occ.  First unocc. 
+------------------------------------------
+   1        4         +0.999      +0.280
+   2        6.0       +0.720      +0.001
+------------------------------------------
+RELIABILITY INDEX R(%) = 94.002
+
+
+ **************************** Skipping for BETA electrons ****************************
+
+---------------------------
+ FRAGMENT OXIDATION STATES 
+---------------------------
+
+ Frag.  Oxidation State 
+------------------------
+   1           0   
+   2        -1.0   
+------------------------
+ Sum:  -1.0
+
+OVERALL RELIABILITY INDEX R(%) = 94.002
+Generating Molden file with EFOs
+Number of fragments: 2
+Total number of EFOs: 20
+[DEBUG]: myCalc.mo_occ.shape = (106,), <class 'tuple'>
+[DEBUG]: occ_coeff.shape = (106, 10)
+[1.0, 0.92, 0.97, 0.97, 1.12, 5504.62, 1965.79, 3316.26, 3316.34, 3651.16, 1.0, 1.0, 1.0, 1.0, 0.99, 0.95, 30.5, 30.5, 88.43, 9554.16]
+
+A molden file, NaBH3_RKS_NAO.molden, with the eigenvectors has been generated.
+

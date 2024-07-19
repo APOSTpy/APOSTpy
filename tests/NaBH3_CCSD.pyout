@@ -1,0 +1,159 @@
+Using  8  threads
+
+
+******** <class 'pyscf.scf.hf_symm.SymAdaptedROHF'> ********
+method = SymAdaptedROHF
+initial guess = chkfile
+damping factor = 0
+level_shift factor = 0
+DIIS = <class 'pyscf.scf.diis.CDIIS'>
+diis_start_cycle = 1
+diis_space = 8
+diis_damp = 0
+SCF conv_tol = 1e-09
+SCF conv_tol_grad = None
+SCF max_cycles = 50
+direct_scf = True
+direct_scf_tol = 1e-13
+chkfile to save SCF result = NaBH3_CCSD.chk
+max_memory 4000 MB (current use 66 MB)
+num. doubly occ = 9  num. singly occ = 2
+Freeze 0 electrons in irreps []
+    20 free electrons in irreps A' A"
+Set gradient conv threshold to 3.16228e-05
+init E= -188.246536868757
+HOMO (A') = 0.0954687262019792  LUMO (A') = 0.0792936333778814
+cycle= 1 E= -188.246536648816  delta_E= 2.2e-07  |g|= 0.000152  |ddm|= 0.00876
+HOMO (A') = 0.0953850733973564  LUMO (A') = 0.0792876940239576
+cycle= 2 E= -188.24653157283  delta_E= 5.08e-06  |g|= 0.000689  |ddm|= 0.0869
+HOMO (A') = 0.095405181228098  LUMO (A') = 0.079289328028229
+cycle= 3 E= -188.246531645478  delta_E= -7.26e-08  |g|= 0.000612  |ddm|= 0.0152
+HOMO (A') = 0.0954654456305587  LUMO (A') = 0.079293207566954
+cycle= 4 E= -188.246536879392  delta_E= -5.23e-06  |g|= 4.33e-06  |ddm|= 0.0864
+HOMO (A') = 0.0954644239851412  LUMO (A') = 0.0792931126708025
+cycle= 5 E= -188.246536879096  delta_E= 2.96e-10  |g|= 5.95e-06  |ddm|= 0.00014
+HOMO (A') = 0.0954656533995555  LUMO (A') = 0.0792932114496287
+Extra cycle  E= -188.246536871375  delta_E= 7.72e-09  |g|= 2.65e-05  |ddm|= 0.00152
+converged SCF energy = -188.246536871375
+
+WARN: RCCSD method does not support ROHF method. ROHF object is converted to UHF object and UCCSD method is called.
+
+
+Using checkpoint...
+
+******** <class 'pyscf.cc.uccsd.UCCSD'> ********
+CC2 = 0
+CCSD nocc = (11, 9), nmo = (77, 77)
+max_cycle = 50
+direct = 0
+conv_tol = 1e-07
+conv_tol_normt = 1e-06
+diis_space = 6
+diis_start_cycle = 0
+diis_start_energy_diff = 1e+09
+max_memory 4000 MB (current use 118 MB)
+Init t2, MP2 energy = -0.123205237120987
+Init E_corr(UCCSD) = -0.124358741071996
+cycle = 1  E_corr(UCCSD) = -0.142890837643178  dE = -0.0185320966  norm(t1,t2) = 0.0539225
+cycle = 2  E_corr(UCCSD) = -0.147269683415684  dE = -0.00437884577  norm(t1,t2) = 0.02118
+cycle = 3  E_corr(UCCSD) = -0.149515488587877  dE = -0.00224580517  norm(t1,t2) = 0.0121107
+cycle = 4  E_corr(UCCSD) = -0.149364662620119  dE = 0.000150825968  norm(t1,t2) = 0.00596071
+cycle = 5  E_corr(UCCSD) = -0.149287549371543  dE = 7.71132486e-05  norm(t1,t2) = 0.00340361
+cycle = 6  E_corr(UCCSD) = -0.149360021557868  dE = -7.24721863e-05  norm(t1,t2) = 0.00195241
+cycle = 7  E_corr(UCCSD) = -0.149375034942885  dE = -1.5013385e-05  norm(t1,t2) = 0.000837729
+cycle = 8  E_corr(UCCSD) = -0.149375647294447  dE = -6.12351562e-07  norm(t1,t2) = 0.000394899
+cycle = 9  E_corr(UCCSD) = -0.149372582927513  dE = 3.06436693e-06  norm(t1,t2) = 0.00019411
+cycle = 10  E_corr(UCCSD) = -0.149370858203983  dE = 1.72472353e-06  norm(t1,t2) = 7.38811e-05
+cycle = 11  E_corr(UCCSD) = -0.149369524098087  dE = 1.3341059e-06  norm(t1,t2) = 3.39535e-05
+cycle = 12  E_corr(UCCSD) = -0.149369091239885  dE = 4.32858202e-07  norm(t1,t2) = 1.663e-05
+cycle = 13  E_corr(UCCSD) = -0.149368956238548  dE = 1.35001337e-07  norm(t1,t2) = 9.34077e-06
+cycle = 14  E_corr(UCCSD) = -0.149368944345412  dE = 1.18931354e-08  norm(t1,t2) = 6.04163e-06
+cycle = 15  E_corr(UCCSD) = -0.149368952699509  dE = -8.3540965e-09  norm(t1,t2) = 3.87422e-06
+cycle = 16  E_corr(UCCSD) = -0.149368934456831  dE = 1.82426777e-08  norm(t1,t2) = 2.34214e-06
+cycle = 17  E_corr(UCCSD) = -0.149368919052474  dE = 1.5404357e-08  norm(t1,t2) = 1.42776e-06
+cycle = 18  E_corr(UCCSD) = -0.149368905532523  dE = 1.35199515e-08  norm(t1,t2) = 8.16807e-07
+UCCSD converged
+E(UCCSD) = -188.3959057769071  E_corr = -0.1493689055325227
+
+
+[DEBUG]:
+    Number of fragments: 2
+    Fragments: [[1], [2, 3, 4, 5]]
+    Basis: aug-cc-pvdz
+    Number of basis functions: 77
+
+
+
+
+-------------------------------------------------------------------------------------
+                            CALCULATION FOR NaBH3_CCSD                             
+-------------------------------------------------------------------------------------
+
+[DEBUG]: Kind of calculation: <class 'pyscf.cc.uccsd.UCCSD'>
+cycle = 1  norm(lambda1,lambda2) = 0.0110487
+cycle = 2  norm(lambda1,lambda2) = 0.00310622
+cycle = 3  norm(lambda1,lambda2) = 0.00158912
+cycle = 4  norm(lambda1,lambda2) = 0.000728135
+cycle = 5  norm(lambda1,lambda2) = 0.000443331
+cycle = 6  norm(lambda1,lambda2) = 0.000234615
+cycle = 7  norm(lambda1,lambda2) = 8.70338e-05
+cycle = 8  norm(lambda1,lambda2) = 3.57321e-05
+cycle = 9  norm(lambda1,lambda2) = 2.04643e-05
+cycle = 10  norm(lambda1,lambda2) = 1.15389e-05
+cycle = 11  norm(lambda1,lambda2) = 7.14611e-06
+cycle = 12  norm(lambda1,lambda2) = 3.98557e-06
+cycle = 13  norm(lambda1,lambda2) = 2.10384e-06
+cycle = 14  norm(lambda1,lambda2) = 1.03541e-06
+cycle = 15  norm(lambda1,lambda2) = 5.12589e-07
+[DEBUG]: no_occ: 
+[2.43370816e+00 1.06196867e+00 1.05616525e+00 1.05361753e+00
+ 1.04299266e+00 9.99984765e-01 9.25383325e-01 9.20015072e-01
+ 9.04439437e-01 4.71220570e-01 4.74189141e-02 1.89487881e-02
+ 1.17687372e-02 8.30115697e-03 7.45882969e-03 6.35872934e-03
+ 5.99284485e-03 4.24074784e-03 3.67629876e-03 2.34724852e-03
+ 2.12652091e-03 2.04647961e-03 1.53799654e-03 1.24294384e-03
+ 1.05022353e-03 8.18197862e-04 7.06509102e-04 5.93585651e-04
+ 4.91326459e-04 4.50613609e-04 3.36033118e-04 2.78435258e-04
+ 2.48546833e-04 2.08584694e-04 1.76192571e-04 1.27993378e-04
+ 1.22613601e-04 1.09009171e-04 1.01487591e-04 7.03926501e-05
+ 5.25289663e-05 4.55503351e-05 3.94118967e-05 3.35829962e-05
+ 3.11571901e-05 2.31870217e-05 2.07022937e-05 1.92532085e-05
+ 1.65022896e-05 1.41381638e-05 1.17954863e-05 9.68027914e-06
+ 7.11927395e-06 5.83028480e-06 5.57930030e-06 4.63644072e-06
+ 3.87437266e-06 3.53514365e-06 2.85829812e-06 2.30802099e-06
+ 2.11688074e-06 1.82446237e-06 1.34161212e-06 1.09520010e-06
+ 9.77518510e-07 8.65196193e-07 6.68254037e-07 4.39796506e-07
+ 3.16487639e-07 2.78379515e-07 1.40459169e-07 1.01470457e-07
+ 5.22265410e-08 4.32164455e-08 2.61493052e-08 4.42541851e-09
+ 7.11723501e-10]
+[DEBUG]: tr_1 = 9.540121325163252
+[DEBUG]: tr_2 = 1.4590936092478264
+[DEBUG]: sum traza = 10.999214934411079
+[DEBUG]: sum no_occ = 10.999214939548203
+[DEBUG]: no_occ: 
+[2.43062624e+00 1.05695295e+00 1.05385157e+00 9.99984864e-01
+ 9.79637655e-01 9.75299864e-01 9.21281374e-01 4.70814782e-01
+ 4.69750134e-02 1.29933517e-02 1.12604928e-02 8.61574004e-03
+ 6.24812504e-03 4.87664186e-03 4.47458491e-03 3.66924379e-03
+ 2.51949980e-03 1.76300840e-03 1.41060801e-03 9.39531959e-04
+ 7.01232621e-04 6.09909989e-04 3.82537983e-04 2.98371249e-04
+ 2.75453320e-04 2.43167567e-04 2.23181137e-04 1.83008503e-04
+ 1.58745862e-04 1.24815591e-04 9.25817090e-05 8.07855568e-05
+ 7.88201605e-05 6.75495176e-05 6.07162815e-05 4.46272260e-05
+ 3.76373088e-05 3.52411685e-05 3.24107071e-05 2.51536667e-05
+ 1.71958890e-05 1.23364264e-05 1.09071278e-05 8.45186129e-06
+ 7.24931247e-06 5.98589698e-06 5.65074902e-06 4.61474298e-06
+ 4.42697267e-06 3.35054866e-06 3.08485490e-06 2.84759358e-06
+ 2.32417705e-06 1.99010907e-06 1.30146953e-06 9.89520008e-07
+ 8.94505645e-07 6.88208383e-07 5.35942717e-07 3.83852330e-07
+ 3.45196804e-07 2.25518936e-07 2.21719241e-07 1.88184750e-07
+ 1.21553344e-07 6.79125273e-08 6.45880457e-08 3.24999299e-08
+ 2.19327837e-08 9.61836895e-09 4.74288701e-09 1.84993299e-09
+ 1.53896262e-09 1.28281237e-09 7.76026025e-10 1.71184956e-10
+ 1.03853097e-11]
+[DEBUG]: tr_1 = 7.942193869679105
+[DEBUG]: tr_2 = 1.0558537180996146
+[DEBUG]: sum traza = 8.99804758777872
+[DEBUG]: sum no_occ = 8.998047607769267
+[DEBUG]: tr Dma = 11.0
+[DEBUG]: Smo_a dim = (77,)

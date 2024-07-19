@@ -1,0 +1,227 @@
+Using  8  threads
+
+
+******** <class 'pyscf.scf.hf_symm.SymAdaptedRHF'> ********
+method = SymAdaptedRHF
+initial guess = minao
+damping factor = 0
+level_shift factor = 0
+DIIS = <class 'pyscf.scf.diis.CDIIS'>
+diis_start_cycle = 1
+diis_space = 8
+diis_damp = 0
+SCF conv_tol = 1e-09
+SCF conv_tol_grad = None
+SCF max_cycles = 50
+direct_scf = True
+direct_scf_tol = 1e-13
+chkfile to save SCF result = /tmp/tmpl91xxvjg
+max_memory 4000 MB (current use 94 MB)
+Freeze 0 electrons in irreps []
+    10 free electrons in irreps A' A"
+Set gradient conv threshold to 3.16228e-05
+Initial guess from minao.
+init E= -75.7582187676851
+HOMO (A") = -0.475748674590924  LUMO (A') = 0.0962952830942782
+cycle= 1 E= -75.9211383441846  delta_E= -0.163  |g|= 0.446  |ddm|= 1.32
+HOMO (A") = -0.415593634585953  LUMO (A') = 0.173348595495731
+cycle= 2 E= -75.9508716373435  delta_E= -0.0297  |g|= 0.229  |ddm|= 0.408
+HOMO (A") = -0.502750674914938  LUMO (A') = 0.16942973130742
+cycle= 3 E= -75.9599549364808  delta_E= -0.00908  |g|= 0.0256  |ddm|= 0.147
+HOMO (A") = -0.495538002529708  LUMO (A') = 0.174386329021043
+cycle= 4 E= -75.9601387250556  delta_E= -0.000184  |g|= 0.00609  |ddm|= 0.0191
+HOMO (A") = -0.497183497709269  LUMO (A') = 0.174387226730122
+cycle= 5 E= -75.9601540798087  delta_E= -1.54e-05  |g|= 0.00101  |ddm|= 0.00696
+HOMO (A") = -0.497541740672456  LUMO (A') = 0.174307840848329
+cycle= 6 E= -75.9601546153434  delta_E= -5.36e-07  |g|= 0.000168  |ddm|= 0.00148
+HOMO (A") = -0.497597982366046  LUMO (A') = 0.174299514369341
+cycle= 7 E= -75.9601546313643  delta_E= -1.6e-08  |g|= 2.06e-05  |ddm|= 0.000303
+HOMO (A") = -0.497594574601315  LUMO (A') = 0.174298448158452
+cycle= 8 E= -75.9601546316383  delta_E= -2.74e-10  |g|= 5.26e-06  |ddm|= 3.78e-05
+HOMO (A") = -0.497593233077354  LUMO (A') = 0.174298439686375
+Extra cycle  E= -75.9601546316549  delta_E= -1.66e-11  |g|= 2.31e-06  |ddm|= 7.48e-06
+converged SCF energy = -75.9601546316549
+
+******** <class 'pyscf.mcscf.mc1step_symm.SymAdaptedCASSCF'> ********
+CAS (3e+3e, 6o), ncore = 2, nvir = 16
+max_cycle_macro = 50
+max_cycle_micro = 4
+conv_tol = 1e-07
+conv_tol_grad = None
+orbital rotation max_stepsize = 0.02
+orbital rotation threshold for CI restart = 0.01
+augmented hessian ah_max_cycle = 30
+augmented hessian ah_conv_tol = 1e-12
+augmented hessian ah_linear dependence = 1e-14
+augmented hessian ah_level shift = 1e-08
+augmented hessian ah_start_tol = 2.5
+augmented hessian ah_start_cycle = 3
+augmented hessian ah_grad_trust_region = 3
+kf_trust_region = 3
+kf_interval = 4
+ci_response_space = 4
+ci_grad_trust_region = 3
+with_dep4 0
+natorb = False
+canonicalization = True
+sorting_mo_energy = False
+ao2mo_level = 2
+chkfile = H2O_CASSCF_casscf.chk
+max_memory 4000 MB (current use 142 MB)
+internal_rotation = False
+******** <class 'pyscf.fci.direct_spin1_symm.FCISolver'> ********
+max. cycles = 50
+conv_tol = 1e-08
+davidson only = False
+linear dependence = 1e-12
+level shift = 0.001
+max iter space = 12
+max_memory 4000 MB
+nroots = 1
+pspace_size = 400
+spin = None
+CI wfn symmetry = None
+Symmetries of active orbitals: A' A' A" A' A' A'
+CASCI E = -76.0188688061140  S^2 = 0.0000000
+Set conv_tol_grad to 0.000316228
+macro iter   1 (  1 JK    1 micro), CASSCF E = -76.0188688061140  dE =  0.00000000e+00  S^2 = 0.0000000
+               |grad[o]|=2.08e-05  |grad[c]|=1.94e-15  |ddm|=    0  |maxRot[o]|=    0
+1-step CASSCF converged in   1 macro (  1 JK   1 micro) steps
+CASSCF canonicalization
+Density matrix diagonal elements [1.97394791 1.97655651 1.99895176 0.02381161 0.0153994  0.0113328 ]
+CASSCF energy = -76.0188688061140
+CASCI E = -76.0188688061140  E(CI) = -13.4190793671376  S^2 = 0.0000000
+
+
+[DEBUG]:
+    Number of fragments: 3
+    Fragments: [[1], [2], [3]]
+    Basis: def2svp
+    Number of basis functions: 24
+
+
+
+
+-------------------------------------------------------------------------------------
+                            CALCULATION FOR H2O_CASSCF                             
+-------------------------------------------------------------------------------------
+
+[DEBUG]: Kind of calculation: <class 'pyscf.mcscf.mc1step_symm.SymAdaptedCASSCF'>
+[DEBUG]: no_occ: 
+[ 1.00000000e+00  1.00000000e+00  9.99475880e-01  9.88479168e-01
+  9.86995250e-01  1.17132689e-02  1.17007710e-02  1.63566216e-03
+  1.70237621e-15  1.20014849e-15  4.24650281e-16  5.19576923e-17
+  2.13747472e-17  4.43582057e-18  5.07999732e-19 -6.37598368e-19
+ -1.88983006e-17 -1.11104682e-16 -1.24283551e-16 -2.36230278e-16
+ -3.25913269e-16 -3.54119892e-16 -4.03752717e-16 -1.50618711e-15]
+[DEBUG]: tr_1 = 0.4630474178489946
+[DEBUG]: tr_2 = 0.46302376022581004
+[DEBUG]: tr_3 = 4.073928821925194
+[DEBUG]: sum traza = 4.999999999999999
+[DEBUG]: sum no_occ = 5.000000000000002
+[DEBUG]: no_occ: 
+[ 1.00000000e+00  1.00000000e+00  9.99475880e-01  9.88479168e-01
+  9.86995250e-01  1.17132689e-02  1.17007710e-02  1.63566216e-03
+  2.24540403e-15  1.11784202e-15  2.07291640e-16  1.39705363e-16
+  1.15521788e-16  3.16472880e-17  1.42520234e-17 -1.73038992e-20
+ -6.26652043e-19 -2.50027313e-17 -7.42063171e-17 -1.15435636e-16
+ -1.96761718e-16 -3.27178618e-16 -4.66321511e-16 -2.29299395e-15]
+[DEBUG]: tr_1 = 0.46304741784899406
+[DEBUG]: tr_2 = 0.46302376022581015
+[DEBUG]: tr_3 = 4.073928821925192
+[DEBUG]: sum traza = 4.9999999999999964
+[DEBUG]: sum no_occ = 5.000000000000002
+[DEBUG]: tr Dma = 3.4330298213838857
+[DEBUG]: Smo_a dim = (24,)
+
+------------------------------
+ EFFAOs FROM THE ALPHA DENSITY 
+------------------------------
+
+[DEBUG]: Occupied Atomic Orbitals (eig_sorted, len=8):
++0.9997   +0.9531   +0.9470   +0.6169   +0.5485   +0.3978   +0.3978   +0.0262   
+ 
+
+
+** FRAGMENT   1 **
+
+Net occupation for fragment   1    0.46305
+Net occupation using >    0.001
+OCCUP.  +0.3978   +0.0262   +0.0238   +0.0143   
+
+** FRAGMENT   2 **
+
+Net occupation for fragment   2    0.46302
+Net occupation using >    0.001
+OCCUP.  +0.3978   +0.0262   +0.0238   +0.0143   
+
+** FRAGMENT   3 **
+
+Net occupation for fragment   3    4.07393
+Net occupation using >    0.001
+OCCUP.  +0.9997   +0.9531   +0.9470   +0.6169   +0.5485   +0.0042   +0.0039   
+
+----------------------------------
+ EOS ANALYSIS FOR alpha ELECTRONS 
+----------------------------------
+
+ Frag.    Elect.    Last occ.  First unocc. 
+------------------------------------------
+   1        0         -0.000      +0.398
+   2        0         -0.000      +0.398
+   3        5         +0.549      +0.004
+------------------------------------------
+RELIABILITY INDEX R(%) = 50.0
+
+------------------------------
+ EFFAOs FROM THE BETA DENSITY 
+------------------------------
+
+[DEBUG]: Occupied Atomic Orbitals (eig_sorted, len=8):
++0.9997   +0.9531   +0.9470   +0.6169   +0.5485   +0.3978   +0.3978   +0.0262   
+ 
+
+
+** FRAGMENT   1 **
+
+Net occupation for fragment   1    0.46305
+Net occupation using >    0.001
+OCCUP.  +0.3978   +0.0262   +0.0238   +0.0143   
+
+** FRAGMENT   2 **
+
+Net occupation for fragment   2    0.46302
+Net occupation using >    0.001
+OCCUP.  +0.3978   +0.0262   +0.0238   +0.0143   
+
+** FRAGMENT   3 **
+
+Net occupation for fragment   3    4.07393
+Net occupation using >    0.001
+OCCUP.  +0.9997   +0.9531   +0.9470   +0.6169   +0.5485   +0.0042   +0.0039   
+
+----------------------------------
+ EOS ANALYSIS FOR beta ELECTRONS 
+----------------------------------
+
+ Frag.    Elect.    Last occ.  First unocc. 
+------------------------------------------
+   1        0         +0.000      +0.398
+   2        0         -0.000      +0.398
+   3        5         +0.549      +0.004
+------------------------------------------
+RELIABILITY INDEX R(%) = 50.0
+
+---------------------------
+ FRAGMENT OXIDATION STATES 
+---------------------------
+
+ Frag.  Oxidation State 
+------------------------
+   1           1   
+   2           1   
+   3          -2   
+------------------------
+ Sum:  0
+
+OVERALL RELIABILITY INDEX R(%) = 50.0

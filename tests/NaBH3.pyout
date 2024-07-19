@@ -1,0 +1,137 @@
+Using  8  threads
+
+
+******** <class 'pyscf.scf.uhf_symm.SymAdaptedUHF'> ********
+method = SymAdaptedUHF
+initial guess = chkfile
+damping factor = 0
+level_shift factor = 0
+DIIS = <class 'pyscf.scf.diis.CDIIS'>
+diis_start_cycle = 1
+diis_space = 8
+diis_damp = 0
+SCF conv_tol = 1e-09
+SCF conv_tol_grad = None
+SCF max_cycles = 50
+direct_scf = True
+direct_scf_tol = 1e-13
+chkfile to save SCF result = NaBH3.chk
+max_memory 4000 MB (current use 92 MB)
+number electrons alpha = 11  beta = 9
+Freeze 0 electrons in irreps []
+    20 free electrons in irreps A' A"
+Set gradient conv threshold to 3.16228e-05
+init E= -188.24857686352
+alpha HOMO (A') = -0.0194659312762622  LUMO (A") = 0.0777077765188849
+beta  HOMO (A') = -0.290538777667303  LUMO (A') = 0.0804114191022168
+cycle= 1 E= -188.248576863521  delta_E= -2.56e-13  |g|= 7.99e-10  |ddm|= 9.92e-09
+alpha HOMO (A') = -0.0194659313842342  LUMO (A") = 0.077707776559773
+beta  HOMO (A') = -0.290538777299312  LUMO (A') = 0.0804114191024673
+Extra cycle  E= -188.24857686352  delta_E= 3.69e-13  |g|= 6.54e-10  |ddm|= 8.12e-09
+converged SCF energy = -188.24857686352  <S^2> = 2.0076057  2S+1 = 3.0050662
+
+
+[DEBUG]:
+    Number of fragments: 2
+    Fragments: [[1], [2, 3, 4, 5]]
+    Basis: aug-cc-pvdz
+    Number of basis functions: 77
+
+
+
+
+-------------------------------------------------------------------------------------
+                               CALCULATION FOR NaBH3                               
+-------------------------------------------------------------------------------------
+
+[DEBUG]: Kind of calculation: <class 'pyscf.scf.uhf_symm.SymAdaptedUHF'>
+
+------------------------------
+ EFFAOs FROM THE ALPHA DENSITY 
+------------------------------
+
+[DEBUG]: Occupied Atomic Orbitals (eig_sorted, len=11):
++1.0000   +1.0000   +0.9990   +0.9979   +0.9979   +0.9872   +0.9774   +0.9774   
++0.9591   +0.9112   +0.8085    
+
+
+** FRAGMENT   1 **
+
+Net occupation for fragment   1    6.17078
+Net occupation using >    0.001
+OCCUP.  +1.0000   +0.9990   +0.9979   +0.9979   +0.9872   +0.9112   +0.1915   +0.0409   
+        +0.0226   +0.0226   
+
+** FRAGMENT   2 **
+
+Net occupation for fragment   2    4.82922
+Net occupation using >    0.001
+OCCUP.  +1.0000   +0.9774   +0.9774   +0.9591   +0.8085   +0.0888   +0.0128   +0.0021   
+        +0.0021   
+
+----------------------------------
+ EOS ANALYSIS FOR alpha ELECTRONS 
+----------------------------------
+
+ Frag.    Elect.    Last occ.  First unocc. 
+------------------------------------------
+   1        6         +0.911      +0.191
+   2        5         +0.809      +0.089
+------------------------------------------
+RELIABILITY INDEX R(%) = 100
+
+------------------------------
+ EFFAOs FROM THE BETA DENSITY 
+------------------------------
+
+[DEBUG]: Occupied Atomic Orbitals (eig_sorted, len=9):
++1.0000   +0.9998   +0.9980   +0.9980   +0.9979   +0.9796   +0.9796   +0.9645   
++0.9345    
+
+
+** FRAGMENT   1 **
+
+Net occupation for fragment   1    5.06497
+Net occupation using >    0.001
+OCCUP.  +1.0000   +0.9980   +0.9980   +0.9979   +0.9645   +0.0655   +0.0204   +0.0204   
+        
+
+** FRAGMENT   2 **
+
+Net occupation for fragment   2    3.93503
+Net occupation using >    0.001
+OCCUP.  +0.9998   +0.9796   +0.9796   +0.9345   +0.0355   +0.0021   +0.0020   +0.0020   
+        
+
+----------------------------------
+ EOS ANALYSIS FOR beta ELECTRONS 
+----------------------------------
+
+ Frag.    Elect.    Last occ.  First unocc. 
+------------------------------------------
+   1        5         +0.965      +0.065
+   2        4         +0.935      +0.035
+------------------------------------------
+RELIABILITY INDEX R(%) = 100
+
+---------------------------
+ FRAGMENT OXIDATION STATES 
+---------------------------
+
+ Frag.  Oxidation State 
+------------------------
+   1           0   
+   2          -1   
+------------------------
+ Sum:  -1
+
+OVERALL RELIABILITY INDEX R(%) = 100.0
+
+WARN: orbitals [1 2 7 8] not symmetrized, norm = [0.98945016 0.98945016 0.75022823 0.75022823]
+
+
+WARN: orbitals [1 2 6 7] not symmetrized, norm = [0.99388909 0.99388909 0.85252151 0.85252151]
+
+
+A molden file, NaBH3.molden, with the eigenvectors has been generated.
+
