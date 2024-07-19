@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 
-from pyscf import gto, scf, lib, tools, mcscf, cc
+from pyscf import gto, scf, lib, tools, cc
 import numpy as np
-import funct as local
-import myApost3d as apost
+import APOSTpy
+import myAPOST3D
 
 ##main program##
 with lib.with_omp_threads(8):
@@ -14,7 +14,7 @@ with lib.with_omp_threads(8):
 
     mol = gto.M()
 
-    mol.basis = 'def2svp'
+    mol.basis = 'def2-tzvp'
     mol.charge = 0
     mol.spin = 0
     mol.atom = '''
@@ -55,10 +55,10 @@ print(f'''\n\n[DEBUG]:
     Number of basis functions: {mol.nao_nr()}
 ''')
 
-local.print_h1(molName)
+
 
 myCalc = mycc
-apost.write_fchk(mol, myCalc, molName, mf.get_ovlp())
-local.getEOS(molName, mol, myCalc, frags, calc='lowdin', genMolden=False)
+myAPOST3D.write_fchk(mol, myCalc, molName, mf.get_ovlp())
+APOSTpy.getEOS(molName, mol, myCalc, frags, calc='lowdin', genMolden=True)
 
 # tools.molden.from_mo(mol, 'test_H2O.molden', mf.mo_coeff, spin='Alpha', symm=None, ene=None, occ=None, ignore_h=True)

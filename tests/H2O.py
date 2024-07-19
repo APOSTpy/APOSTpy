@@ -1,26 +1,23 @@
 #!/usr/bin/env python
 
-from pyscf import gto, scf, lib, tools
-import numpy as np
-import funct as local
-import myApost3d as apost
+from pyscf import gto, scf, lib
+import APOSTpy
+import myAPOST3D
 
-##main program##
 with lib.with_omp_threads(8):
-    ##Input calcul energia##
-    molName = 'H2O' # CHANGE THIS
+    molName = 'H2O'
 
     print('Using ', lib.num_threads(),' threads')
 
     mol=gto.M()
 
-    mol.basis='aug-cc-pvdz'
+    mol.basis='aug-cc-pvtz'
     mol.charge = 0
     mol.spin = 0
     mol.atom='''
-    H  0 1 0
-    H  0 0 1
-    O  0 0 0
+    H   -0.0211   -0.0020    0.0000
+    H    1.4769   -0.2730    0.0000
+    O    0.8345    0.4519    0.0000
     '''
 
     mol.cart= False
@@ -42,10 +39,11 @@ print(f'''\n\n[DEBUG]:
     Number of basis functions: {mol.nao_nr()}
 ''')
 
-local.print_h1(molName)
 
-apost.write_fchk(mol, mf, molName,mf.get_ovlp())
 
-local.getEOS(molName, mol, mf, frags, calc='lowdin', genMolden=True)
+# myAPOST3D.write_fchk(mol, mf, molName,mf.get_ovlp())
+# APOSTpy.getEOS(molName, mol, mf, frags, calc='lowdin', genMolden=False, getEOSu=True)
 
-tools.molden.from_mo(mol, 'test_H2O.molden', mf.mo_coeff, spin='Alpha', symm=None, ene=None, occ=None, ignore_h=True)
+# S = APOSTpy.make_fragment_overlap(mol,mf,frags,calc='lowdin',getEOSu=True) #; print( S )
+# APOSTpy.getEFOs(molName, mol, mf, frags, calc='lowdin', genMolden=False, getEOSu=True)
+APOSTpy.getEOS(molName, mol, mf, frags, calc='lowdin', genMolden=False, getEOSu=False)

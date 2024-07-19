@@ -1,22 +1,19 @@
 #!/usr/bin/env python
 
-from pyscf import gto, scf, lib, tools
-import numpy as np
+from pyscf import gto, dft, lib
 import APOSTpy
 import myAPOST3D
 
-##main program##
 with lib.with_omp_threads(8):
-    ##Input calcul energia##
-    molName = 'Fc'
-
     print('Using ', lib.num_threads(),' threads')
+
+    molName = 'Fc_UKS'
 
     mol=gto.M()
 
     mol.basis='aug-cc-pvdz'
     mol.charge = 0
-    mol.spin = 0
+    mol.spin = 2
     mol.atom='''
     C       0.000000     1.214880     1.678491
     C      -1.155419     0.375418     1.678491
@@ -46,19 +43,16 @@ with lib.with_omp_threads(8):
     mol.verbose=4
     mol.build() 
 
-    mf = scf.RHF(mol)
+    mf = dft.UKS(mol)
     mf.chkfile = molName + '.chk'
     mf.init_guess = 'chkfile'
     mf.kernel()
-
-# myAPOST3D.write_fchk(mol, mf, molName,mf.get_ovlp())
 
 f1 = list(range(1, 11))
 f2 = list(range(11, 21))
 f3 = [21]
 frags=[f1,f2,f3]
 
-# tools.molden.from_mo(mol, molName+'.molden', mf.mo_coeff, spin='Alpha', symm=None, ene=None, occ=None, ignore_h=True)
 
 print(f'''\n\n[DEBUG]:
     Number of fragments: {len(frags)}
@@ -68,8 +62,7 @@ print(f'''\n\n[DEBUG]:
 ''')
 
 
-
 myAPOST3D.write_fchk(mol, mf, molName,mf.get_ovlp())
 
-APOSTpy.getEOS(molName, mol, mf, frags, calc='lowdin', genMolden=True)
+APOSTpy.getEOS(molName, mol, mf, frags, calc='lowdin', genMolden=False, getEOSu=False)
 

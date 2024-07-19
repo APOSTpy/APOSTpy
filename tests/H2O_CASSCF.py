@@ -2,8 +2,8 @@
 
 from pyscf import gto, scf, lib, tools, mcscf
 import numpy as np
-import funct as local
-import myApost3d as apost
+import APOSTpy
+import myAPOST3D
 
 ##main program##
 with lib.with_omp_threads(8):
@@ -33,7 +33,8 @@ with lib.with_omp_threads(8):
     # mf.init_guess = 'chkfile'
     mf.kernel()
 
-    mc = mcscf.CASSCF(mf, 6, 6)
+    mc = mcscf.CASSCF(mf, 6, (4,2))
+    # mc = mcscf.CASSCF(mf, 6, 6)
     try:
         mc.chkfile = molName + '_casscf.chk'
         mo = lib.chkfile.load(mc.chkfile, 'mcscf/mo_coeff')
@@ -50,12 +51,12 @@ print(f'''\n\n[DEBUG]:
     Number of basis functions: {mol.nao_nr()}
 ''')
 
-local.print_h1(molName)
+
 
 myCalc = mc
-apost.write_fchk(mol, myCalc, molName,mf.get_ovlp())
-local.getEOS(molName, mol, myCalc, frags, calc='lowdin', genMolden=False)
+# myAPOST3D.write_fchk(mol, myCalc, molName, mol.intor_symmetric('int1e_ovlp'))
+# myAPOST3D.write_dm12(mol, myCalc, molName)
+APOSTpy.getEOS(molName, mol, myCalc, frags, calc='lowdin', genMolden=False, getEOSu=False)
 
 # tools.molden.from_mo(mol, 'test_H2O.molden', mf.mo_coeff, spin='Alpha', symm=None, ene=None, occ=None, ignore_h=True)
-
-tools.molden.from_mcscf(mc, 'test_H2O_CASSCF.molden', ignore_h=True, cas_natorb=False)
+# tools.molden.from_mcscf(mc, 'test_H2O_CASSCF.molden', ignore_h=True, cas_natorb=False)

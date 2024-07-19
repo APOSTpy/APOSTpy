@@ -10,6 +10,7 @@ if [ -z $1 ]; then
   for file in $files; do
     if [[ "$exclude_files" == *"${file%.py}"* ]]; then continue; fi
     name=$(echo $file | sed 's/.py//')
+    echo "-> Running test for $name..."
     python3 "$file" > "$name.pyout"
   done
 else

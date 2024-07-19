@@ -3,8 +3,8 @@
 from pyscf import gto, scf, lib, tools
 from pyscf.scf import addons
 import numpy as np
-import funct as local
-import myApost3d as apost
+import APOSTpy
+import myAPOST3D
 
 ## main program ##
 with lib.with_omp_threads(8):
@@ -46,9 +46,9 @@ print(f'''\n\n[DEBUG]:
     Number of basis functions: {mol.nao_nr()}
 ''')
 
-local.print_h1(molName)
 
-apost.write_fchk(mol, mf, molName,mf.get_ovlp())
 
-local.getEOS(molName, mol, mf, frags, calc='lowdin', genMolden=True)
+myAPOST3D.write_fchk(mol, mf, molName,mf.get_ovlp())
+
+APOSTpy.getEOS(molName, mol, mf, frags, calc='lowdin', genMolden=True)
 

@@ -1,6 +1,7 @@
 venv-quantum
 __pycache__
+.vscode
 *_workdir
 /tests/*
 !/tests/*.py
-casscf.py
+!/tests/runTests

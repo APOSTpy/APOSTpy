@@ -1,20 +1,17 @@
 #!/usr/bin/env python
 
-from pyscf import gto, scf, lib, tools
-import numpy as np
+from pyscf import gto, dft, lib
 import APOSTpy
 import myAPOST3D
 
-##main program##
-with lib.with_omp_threads(8):
-    ##Input calcul energia##
-    molName = 'nabh3' # CHANGE THIS
-
+with lib.with_omp_threads(4):
     print('Using ', lib.num_threads(),' threads')
+
+    molName = 'NaBH3_UKS_nao_singlet'
 
     mol=gto.M()
 
-    mol.basis='aug-cc-pvdz'
+    mol.basis='cc-pvtz'
     mol.charge = -1
     mol.spin = 0
     mol.atom='''
@@ -24,15 +21,17 @@ with lib.with_omp_threads(8):
     H       -0.603961416      1.046091858     -1.889063612
     Na       0.000000000      0.000000000      1.115456388
     '''
-    mol.cart= False
-    mol.symmetry = True 
-    mol.verbose = 0
-    mol.build() 
-    S_AO=mol.intor("int1e_ovlp")
 
-    mf = scf.RHF(mol)
-    mf.chkfile = molName + '.chk'
-#    mf.init_guess = 'chkfile'
+    mol.cart= False
+    mol.symmetry = False
+    mol.verbose=4
+    mol.build() 
+
+    mf = dft.UKS(mol)
+    mf.xc="b3lyp"
+    # mf.chkfile = molName + '.chk'
+    mf.chkfile = 'NaBH3_UKS_nao_triplet.chk'
+    mf.init_guess = 'chkfile'
     mf.kernel()
 
 frags=[[1,2,3,4],[5]]
@@ -44,7 +43,5 @@ print(f'''\n\n[DEBUG]:
     Number of basis functions: {mol.nao_nr()}
 ''')
 
-
-myAPOST3D.write_fchk(mol, mf, molName,S_AO)
-APOSTpy.getEOS(molName, mol, mf, frags, calc='lowdin', genMolden=True)
-
+myAPOST3D.write_fchk(mol, mf, molName,mf.get_ovlp())
+APOSTpy.getEOS(molName, mol, mf, frags, calc='nao', genMolden=True)
